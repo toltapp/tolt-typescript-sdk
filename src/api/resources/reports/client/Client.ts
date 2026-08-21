@@ -23,6 +23,8 @@ export class ReportsClient {
     }
 
     /**
+     * Aggregate revenue and commission totals (grouped by currency) plus commission, customer, and partner counts for the organization. Supports optional program_id and start_date/end_date filters.
+     *
      * @param {ToltApi.ReportsOverviewRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
