@@ -3,6 +3,7 @@
 import { ClicksClient } from "./api/resources/clicks/client/Client.js";
 import { CommissionsClient } from "./api/resources/commissions/client/Client.js";
 import { CustomersClient } from "./api/resources/customers/client/Client.js";
+import { EmbedClient } from "./api/resources/embed/client/Client.js";
 import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { GroupsClient } from "./api/resources/groups/client/Client.js";
 import { LinksClient } from "./api/resources/links/client/Client.js";
@@ -23,6 +24,7 @@ export declare namespace ToltApiClient {
 
 export class ToltApiClient {
     protected readonly _options: NormalizedClientOptionsWithAuth<ToltApiClient.Options>;
+    protected _embed: EmbedClient | undefined;
     protected _groups: GroupsClient | undefined;
     protected _flows: FlowsClient | undefined;
     protected _clicks: ClicksClient | undefined;
@@ -37,6 +39,10 @@ export class ToltApiClient {
 
     constructor(options: ToltApiClient.Options) {
         this._options = normalizeClientOptionsWithAuth(options);
+    }
+
+    public get embed(): EmbedClient {
+        return (this._embed ??= new EmbedClient(this._options));
     }
 
     public get groups(): GroupsClient {

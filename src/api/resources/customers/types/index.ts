@@ -1,4 +1,3 @@
-export * from "./CreateCustomerRequest.js";
 export * from "./CreateCustomerResponse.js";
 export * from "./DeleteCustomerResponse.js";
 export * from "./GetCustomerResponse.js";

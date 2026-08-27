@@ -120,23 +120,22 @@ export class CustomersClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.NotFoundError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.createCustomer({
-     *         "key": "value"
-     *     })
+     *     await client.customers.createCustomer()
      */
     public createCustomer(
-        request: ToltApi.CreateCustomerRequest,
+        request: ToltApi.CreateCustomerRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.CreateCustomerResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createCustomer(request, requestOptions));
     }
 
     private async __createCustomer(
-        request: ToltApi.CreateCustomerRequest,
+        request: ToltApi.CreateCustomerRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.CreateCustomerResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -174,6 +173,8 @@ export class CustomersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 404:
+                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
