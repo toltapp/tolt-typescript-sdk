@@ -4,10 +4,8 @@ TypeScript SDK for the [Tolt](https://tolt.com) public API (v2). Generated from 
 
 ## Install
 
-Not published to npm yet. For now, install from a packed tarball or straight from this repo:
-
 ```bash
-npm install github:toltapp/tolt-typescript-sdk
+npm install @tolt/api
 ```
 
 ## Usage
