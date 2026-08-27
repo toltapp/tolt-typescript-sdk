@@ -18,7 +18,7 @@ export namespace ReportsOverview {
         export interface Item {
             /** ISO currency code for this bucket, or null when the source rows carry none. */
             currency: string | null;
-            /** Integer amount in the smallest currency unit (cents), serialized as a string. */
+            /** Integer amount in the smallest currency unit (cents), serialized as a string. Summed across the row's currencies; scope to a single-currency program with program_id, or use /reports/overview for the per-currency split. */
             amount: string;
         }
     }
@@ -29,7 +29,7 @@ export namespace ReportsOverview {
         export interface Item {
             /** ISO currency code for this bucket, or null when the source rows carry none. */
             currency: string | null;
-            /** Integer amount in the smallest currency unit (cents), serialized as a string. */
+            /** Integer amount in the smallest currency unit (cents), serialized as a string. Summed across the row's currencies; scope to a single-currency program with program_id, or use /reports/overview for the per-currency split. */
             amount: string;
         }
     }
