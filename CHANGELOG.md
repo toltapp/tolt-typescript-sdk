@@ -1,3 +1,9 @@
+## [0.3.0](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.2.0...v0.3.0) (2026-09-21)
+
+### Features
+
+* regenerate SDK from the latest OpenAPI spec ([#3](https://github.com/toltapp/tolt-typescript-sdk/issues/3)) ([bdc0673](https://github.com/toltapp/tolt-typescript-sdk/commit/bdc0673852b685771e92243364359bfe4609b004))
+
 ## [0.2.0](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.1.1...v0.2.0) (2026-08-27)
 
 ### Features
