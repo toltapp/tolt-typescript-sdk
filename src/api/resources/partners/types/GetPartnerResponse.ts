@@ -5,5 +5,5 @@ import type * as ToltApi from "../../../index.js";
 export interface GetPartnerResponse {
     success: boolean;
     message: string;
-    data: ToltApi.Partner;
+    data: ToltApi.PartnerDetails;
 }
