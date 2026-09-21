@@ -5,13 +5,13 @@
  *     {}
  */
 export interface CreateEmbedTokenRequest {
-    partnerId?: string;
+    partner_id?: string;
     partner?: CreateEmbedTokenRequest.Partner;
 }
 
 export namespace CreateEmbedTokenRequest {
     export interface Partner {
         email: string;
-        programId: string;
+        program_id: string;
     }
 }

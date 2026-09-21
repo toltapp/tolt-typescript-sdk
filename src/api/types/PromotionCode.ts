@@ -6,13 +6,13 @@ export interface PromotionCode {
     type: string | null;
     value: string | null;
     duration: string;
-    durationInMonths: string | null;
+    duration_in_months: string | null;
     active: boolean | null;
-    entityType: string | null;
-    externalId: string | null;
-    partnerId: string | null;
-    programId: string | null;
-    groupId: string | null;
-    createdAt: string;
-    updatedAt: string;
+    entity_type: string | null;
+    external_id: string | null;
+    partner_id: string | null;
+    program_id: string | null;
+    group_id: string | null;
+    created_at: string;
+    updated_at: string;
 }

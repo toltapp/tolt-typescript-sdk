@@ -5,30 +5,30 @@ export interface Transaction {
     /** Integer amount in the smallest currency unit (cents), serialized as a string. */
     amount: string | null;
     /** Integer amount in the smallest currency unit (cents), serialized as a string. */
-    amountExcludingTax: string | null;
+    amount_excluding_tax: string | null;
     /** Integer amount in the smallest currency unit (cents), serialized as a string. */
-    amountIncludingTax: string | null;
+    amount_including_tax: string | null;
     currency: string | null;
     tax: number | null;
     /** Integer amount in the smallest currency unit (cents), serialized as a string. */
-    paymentAmount: string | null;
-    paymentCurrency: string | null;
+    payment_amount: string | null;
+    payment_currency: string | null;
     status: string | null;
     source: string | null;
-    billingType: string | null;
+    billing_type: string | null;
     interval: string | null;
     quantity: number | null;
-    partnerId: string | null;
-    customerId: string | null;
-    programId: string | null;
-    promotionCodeId: string | null;
-    promotionCodeName: string | null;
-    chargeId: string | null;
-    clickId: string | null;
-    productIds: string[] | null;
-    productNames: string[] | null;
-    conversionRate: string | null;
+    partner_id: string | null;
+    customer_id: string | null;
+    program_id: string | null;
+    promotion_code_id: string | null;
+    promotion_code_name: string | null;
+    charge_id: string | null;
+    click_id: string | null;
+    product_ids: string[] | null;
+    product_names: string[] | null;
+    conversion_rate: string | null;
     metadata?: unknown | undefined;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
 }

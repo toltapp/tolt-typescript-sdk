@@ -4,16 +4,16 @@
  * @example
  *     {
  *         amount: 1,
- *         customerId: "customerId"
+ *         customer_id: "customer_id"
  *     }
  */
 export interface CreateTransactionRequest {
     /** Monetary amount as an integer in the smallest currency unit (cents), e.g. 500 = 5.00 */
     amount: number;
-    customerId: string;
-    billingType?: string;
-    chargeId?: string;
-    clickId?: string;
+    customer_id: string;
+    billing_type?: string;
+    charge_id?: string;
+    click_id?: string;
     interval?: string;
     source?: string;
 }

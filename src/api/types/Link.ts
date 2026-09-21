@@ -5,9 +5,9 @@ export interface Link {
     value: string | null;
     param: string | null;
     status: string | null;
-    partnerId: string | null;
-    programId: string | null;
-    campaignId: string | null;
-    createdAt: string;
-    updatedAt: string;
+    partner_id: string | null;
+    program_id: string | null;
+    campaign_id: string | null;
+    created_at: string;
+    updated_at: string;
 }

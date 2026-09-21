@@ -2,5 +2,41 @@
 
 export interface Error_ {
     success: boolean;
+    /** Human-readable explanation. May change; branch on code instead. */
     message: string;
+    /** Stable machine-readable error code. */
+    code: Error_.Code;
+    doc_url: string;
+    /** One entry per offending field. Present on validation_error and invalid_reference. */
+    errors?: Error_.Errors.Item[] | undefined;
+}
+
+export namespace Error_ {
+    /** Stable machine-readable error code. */
+    export const Code = {
+        BadRequest: "bad_request",
+        ValidationError: "validation_error",
+        InvalidReference: "invalid_reference",
+        InvalidCursor: "invalid_cursor",
+        Unauthorized: "unauthorized",
+        Forbidden: "forbidden",
+        NotFound: "not_found",
+        Conflict: "conflict",
+        AlreadyExists: "already_exists",
+        CommissionPaid: "commission_paid",
+        CommissionFrozen: "commission_frozen",
+        TransactionRefunded: "transaction_refunded",
+        CommissionExists: "commission_exists",
+        RateLimited: "rate_limited",
+        InternalError: "internal_error",
+    } as const;
+    export type Code = (typeof Code)[keyof typeof Code];
+    export type Errors = Errors.Item[];
+
+    export namespace Errors {
+        export interface Item {
+            field: string;
+            message: string;
+        }
+    }
 }

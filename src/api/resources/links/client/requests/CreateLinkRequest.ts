@@ -4,11 +4,11 @@
  * @example
  *     {
  *         value: "value",
- *         partnerId: "partnerId"
+ *         partner_id: "partner_id"
  *     }
  */
 export interface CreateLinkRequest {
     value: string;
     param?: string;
-    partnerId: string;
+    partner_id: string;
 }

@@ -3,15 +3,15 @@
 export interface Program {
     id: string;
     name: string | null;
-    productName: string | null;
+    product_name: string | null;
     type: string | null;
     status: string | null;
-    currencyCode: string | null;
-    cookieDuration: number | null;
-    payoutTerm: string | null;
-    minimumPayout: number | null;
-    websiteUrl: string | null;
+    currency_code: string | null;
+    cookie_duration: number | null;
+    payout_term: string | null;
+    minimum_payout: number | null;
+    website_url: string | null;
     subdomain: string | null;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
 }

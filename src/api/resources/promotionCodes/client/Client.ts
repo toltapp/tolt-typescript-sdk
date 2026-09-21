@@ -29,6 +29,7 @@ export class PromotionCodesClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -49,7 +50,13 @@ export class PromotionCodesClient {
         const {
             limit,
             order,
+            sort,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter,
+            created_before: createdBefore,
+            updated_after: updatedAfter,
+            updated_before: updatedBefore,
             program_id: programId,
             partner_id: partnerId,
             type: type_,
@@ -58,7 +65,13 @@ export class PromotionCodesClient {
         const _queryParams: Record<string, unknown> = {
             limit,
             order: order != null ? order : undefined,
+            sort: sort != null ? sort : undefined,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter != null ? createdAfter : undefined,
+            created_before: createdBefore != null ? createdBefore : undefined,
+            updated_after: updatedAfter != null ? updatedAfter : undefined,
+            updated_before: updatedBefore != null ? updatedBefore : undefined,
             program_id: programId,
             partner_id: partnerId,
             type: type_,
@@ -100,6 +113,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -118,13 +136,14 @@ export class PromotionCodesClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.promotionCodes.createPromotionCode({
      *         code: "code",
-     *         partnerId: "partnerId"
+     *         partner_id: "partner_id"
      *     })
      */
     public createPromotionCode(
@@ -173,6 +192,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -191,6 +215,7 @@ export class PromotionCodesClient {
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -243,6 +268,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -262,6 +292,7 @@ export class PromotionCodesClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -319,6 +350,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -337,6 +373,7 @@ export class PromotionCodesClient {
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -389,6 +426,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,

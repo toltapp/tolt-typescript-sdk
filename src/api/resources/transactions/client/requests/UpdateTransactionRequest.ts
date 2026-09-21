@@ -12,9 +12,9 @@ export interface UpdateTransactionRequest {
     amount?: number;
     status?: string | null;
     source?: string | null;
-    billingType?: string | null;
-    chargeId?: string | null;
-    clickId?: string | null;
+    billing_type?: string | null;
+    charge_id?: string | null;
+    click_id?: string | null;
     interval?: string | null;
-    createdAt?: string;
+    created_at?: string;
 }

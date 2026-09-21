@@ -11,10 +11,10 @@ export interface UpdateCustomerRequest {
     email?: string;
     name?: string | null;
     status?: string | null;
-    customerId?: string;
-    subscriptionId?: string | null;
-    clickId?: string | null;
-    linkId?: string | null;
-    leadAt?: string | null;
-    activeAt?: string | null;
+    customer_id?: string;
+    subscription_id?: string | null;
+    click_id?: string | null;
+    link_id?: string | null;
+    lead_at?: string | null;
+    active_at?: string | null;
 }

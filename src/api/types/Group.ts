@@ -4,13 +4,13 @@ export interface Group {
     id: string;
     name: string | null;
     description: string | null;
-    programId: string | null;
-    isDefault: boolean | null;
-    publicKey: string | null;
-    websiteUrl: string | null;
-    isPrivate: boolean | null;
-    allowManualLeadSubmission: boolean | null;
-    minimumPayout: number | null;
-    createdAt: string;
-    updatedAt: string;
+    program_id: string | null;
+    is_default: boolean | null;
+    public_key: string | null;
+    website_url: string | null;
+    is_private: boolean | null;
+    allow_manual_lead_submission: boolean | null;
+    minimum_payout: number | null;
+    created_at: string;
+    updated_at: string;
 }

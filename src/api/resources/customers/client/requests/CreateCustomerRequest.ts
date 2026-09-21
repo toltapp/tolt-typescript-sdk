@@ -7,10 +7,10 @@
 export interface CreateCustomerRequest {
     email?: string;
     name?: string;
-    customerId?: string;
+    customer_id?: string;
     status?: string;
-    subscriptionId?: string;
-    clickId?: string;
-    linkId?: string;
-    partnerId?: string;
+    subscription_id?: string;
+    click_id?: string;
+    link_id?: string;
+    partner_id?: string;
 }

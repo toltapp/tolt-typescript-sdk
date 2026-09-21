@@ -2,5 +2,5 @@
 
 export interface EmbedToken {
     token: string;
-    expiresAt: string;
+    expires_at: string;
 }
