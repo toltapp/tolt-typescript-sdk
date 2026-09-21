@@ -5,7 +5,7 @@ import type * as ToltApi from "../../../index.js";
 export interface ListPartnersResponse {
     success: boolean;
     message: string;
-    data: ToltApi.Partner[];
+    data: ToltApi.PartnerDetails[];
     has_more: boolean;
     /** Opaque cursor marking the last item on this page. Pass it as starting_after to continue. Null when the page is empty. */
     next_cursor: string | null;

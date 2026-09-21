@@ -18,5 +18,7 @@ export interface CreatedPartner {
     completed_onboarding: boolean | null;
     created_at: string;
     updated_at: string;
+    rejected_at: string | null;
+    suspended_at: string | null;
     link: ToltApi.Link;
 }
