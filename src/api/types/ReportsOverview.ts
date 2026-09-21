@@ -6,9 +6,9 @@ export interface ReportsOverview {
     /** Approved and paid commission totals, one entry per currency. */
     commissions: ReportsOverview.Commissions.Item[];
     /** Number of approved and paid commissions. */
-    commissionCount: number;
-    customerCount: number;
-    partnerCount: number;
+    commission_count: number;
+    customer_count: number;
+    partner_count: number;
 }
 
 export namespace ReportsOverview {

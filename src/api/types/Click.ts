@@ -8,9 +8,9 @@ export interface Click {
     browser: string | null;
     country: string | null;
     state: string | null;
-    linkId: string | null;
-    programId: string | null;
-    partnerId: string | null;
-    createdAt: string;
-    updatedAt: string;
+    link_id: string | null;
+    program_id: string | null;
+    partner_id: string | null;
+    created_at: string;
+    updated_at: string;
 }

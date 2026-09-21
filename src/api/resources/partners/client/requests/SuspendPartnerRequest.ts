@@ -8,5 +8,5 @@
  */
 export interface SuspendPartnerRequest {
     id: string;
-    suspensionReason?: string | null;
+    suspension_reason?: string | null;
 }

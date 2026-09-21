@@ -29,6 +29,7 @@ export class TransactionsClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -49,7 +50,13 @@ export class TransactionsClient {
         const {
             limit,
             order,
+            sort,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter,
+            created_before: createdBefore,
+            updated_after: updatedAfter,
+            updated_before: updatedBefore,
             program_id: programId,
             partner_id: partnerId,
             customer_id: customerId,
@@ -59,7 +66,13 @@ export class TransactionsClient {
         const _queryParams: Record<string, unknown> = {
             limit,
             order: order != null ? order : undefined,
+            sort: sort != null ? sort : undefined,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter != null ? createdAfter : undefined,
+            created_before: createdBefore != null ? createdBefore : undefined,
+            updated_after: updatedAfter != null ? updatedAfter : undefined,
+            updated_before: updatedBefore != null ? updatedBefore : undefined,
             program_id: programId,
             partner_id: partnerId,
             customer_id: customerId,
@@ -102,6 +115,11 @@ export class TransactionsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -120,13 +138,14 @@ export class TransactionsClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.createTransaction({
      *         amount: 1,
-     *         customerId: "customerId"
+     *         customer_id: "customer_id"
      *     })
      */
     public createTransaction(
@@ -175,6 +194,11 @@ export class TransactionsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -193,6 +217,7 @@ export class TransactionsClient {
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -245,6 +270,11 @@ export class TransactionsClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -265,6 +295,7 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -324,6 +355,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -343,6 +379,7 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -397,6 +434,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -416,6 +458,7 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -470,6 +513,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -491,6 +539,7 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -548,6 +597,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,

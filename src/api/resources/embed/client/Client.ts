@@ -32,6 +32,7 @@ export class EmbedClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -86,6 +87,11 @@ export class EmbedClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,

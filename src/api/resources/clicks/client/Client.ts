@@ -4,6 +4,7 @@ import type { BaseClientOptions, BaseRequestOptions } from "../../../../BaseClie
 import { type NormalizedClientOptionsWithAuth, normalizeClientOptionsWithAuth } from "../../../../BaseClient.js";
 import { mergeHeaders } from "../../../../core/headers.js";
 import * as core from "../../../../core/index.js";
+import { mergeAdditionalBodyParameters } from "../../../../core/requestBody.js";
 import * as environments from "../../../../environments.js";
 import { handleNonStatusCodeError } from "../../../../errors/handleNonStatusCodeError.js";
 import * as errors from "../../../../errors/index.js";
@@ -23,50 +24,33 @@ export class ClicksClient {
     }
 
     /**
-     * @param {ToltApi.ListClicksRequest} request
+     * Records a click on a partner's link from your own server, for visits the browser script cannot see. Identify the source by link_id, by partner_id with an optional link_id, or by the link's param and value; the partner and program are resolved from it. Pass the returned id as click_id when you create the customer.
+     *
+     * @param {ToltApi.CreateClickRequest} request
      * @param {ClicksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.clicks.listClicks()
+     *     await client.clicks.createClick({
+     *         "key": "value"
+     *     })
      */
-    public listClicks(
-        request: ToltApi.ListClicksRequest = {},
+    public createClick(
+        request: ToltApi.CreateClickRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListClicksResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listClicks(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateClickResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createClick(request, requestOptions));
     }
 
-    private async __listClicks(
-        request: ToltApi.ListClicksRequest = {},
+    private async __createClick(
+        request: ToltApi.CreateClickRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListClicksResponse>> {
-        const {
-            limit,
-            order,
-            starting_after: startingAfter,
-            program_id: programId,
-            partner_id: partnerId,
-            link_id: linkId,
-            country,
-            device,
-            browser,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            starting_after: startingAfter,
-            program_id: programId,
-            partner_id: partnerId,
-            link_id: linkId,
-            country,
-            device,
-            browser,
-        };
+    ): Promise<core.WithRawResponse<ToltApi.CreateClickResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -80,13 +64,12 @@ export class ClicksClient {
                     environments.ToltApiEnvironment.Production,
                 "v2/clicks",
             ),
-            method: "GET",
+            method: "POST",
             headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
             maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -94,7 +77,7 @@ export class ClicksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ListClicksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateClickResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -103,6 +86,11 @@ export class ClicksClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -112,7 +100,7 @@ export class ClicksClient {
             }
         }
 
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/clicks");
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/clicks");
     }
 
     /**
@@ -121,6 +109,7 @@ export class ClicksClient {
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -173,6 +162,11 @@ export class ClicksClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,

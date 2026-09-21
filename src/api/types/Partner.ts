@@ -3,13 +3,17 @@
 export interface Partner {
     id: string;
     email: string;
-    firstName: string | null;
-    lastName: string | null;
-    companyName: string | null;
+    first_name: string | null;
+    last_name: string | null;
+    company_name: string | null;
     status: string;
-    groupId: string | null;
-    programId: string | null;
-    countryCode: string | null;
-    createdAt: string;
-    updatedAt: string;
+    group_id: string | null;
+    program_id: string | null;
+    country_code: string | null;
+    website_url: string | null;
+    /** Name shown for the partner in the dashboard. */
+    display_name: string | null;
+    completed_onboarding: boolean | null;
+    created_at: string;
+    updated_at: string;
 }

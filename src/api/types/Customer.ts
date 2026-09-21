@@ -2,20 +2,20 @@
 
 export interface Customer {
     id: string;
-    customerId: string | null;
+    customer_id: string | null;
     identifier: string | null;
     email: string | null;
     name: string | null;
     status: string | null;
     plan: string | null;
-    subscriptionId: string | null;
-    partnerId: string | null;
-    programId: string | null;
-    linkId: string | null;
-    promotionCodeId: string | null;
-    clickId: string | null;
-    leadAt: string;
-    activeAt: string;
-    createdAt: string;
-    updatedAt: string;
+    subscription_id: string | null;
+    partner_id: string | null;
+    program_id: string | null;
+    link_id: string | null;
+    promotion_code_id: string | null;
+    click_id: string | null;
+    lead_at: string;
+    active_at: string;
+    created_at: string;
+    updated_at: string;
 }

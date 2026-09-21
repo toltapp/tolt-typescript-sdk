@@ -9,7 +9,20 @@ import type * as ToltApi from "../../../../index.js";
 export interface ListCommissionsRequest {
     limit?: number;
     order?: ToltApi.ListCommissionsRequestOrder;
+    /** Column the list is ordered and paged by. */
+    sort?: ToltApi.ListCommissionsRequestSort;
+    /** Continue after a position: the next_cursor of a previous page, or an item id when sorting by created_at. Cannot be combined with ending_before. */
     starting_after?: string;
+    /** Page backward from a position: the prev_cursor of a previous page, or an item id when sorting by created_at. Cannot be combined with starting_after. */
+    ending_before?: string;
+    /** Only items created at or after this ISO 8601 time. */
+    created_after?: string;
+    /** Only items created before this ISO 8601 time. */
+    created_before?: string;
+    /** Only items updated at or after this ISO 8601 time. Combine with sort=updated_at to sync changes. */
+    updated_after?: string;
+    /** Only items updated before this ISO 8601 time. */
+    updated_before?: string;
     program_id?: string;
     partner_id?: string;
     customer_id?: string;

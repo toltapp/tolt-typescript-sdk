@@ -4,12 +4,12 @@
  * @example
  *     {
  *         code: "code",
- *         partnerId: "partnerId"
+ *         partner_id: "partner_id"
  *     }
  */
 export interface CreatePromotionCodeRequest {
     code: string;
     type?: string;
     value?: string;
-    partnerId: string;
+    partner_id: string;
 }

@@ -24,11 +24,172 @@ export class PartnersClient {
     }
 
     /**
+     * Approves up to 100 partners. Each id is processed on its own and the response reports the outcome per id, so one refused partner does not fail the request.
+     *
+     * @param {ToltApi.BulkApprovePartnersRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.bulkApprovePartners({
+     *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+     *     })
+     */
+    public bulkApprovePartners(
+        request: ToltApi.BulkApprovePartnersRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.BulkApprovePartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__bulkApprovePartners(request, requestOptions));
+    }
+
+    private async __bulkApprovePartners(
+        request: ToltApi.BulkApprovePartnersRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.BulkApprovePartnersResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                "v2/partners/bulk/approve",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.BulkApprovePartnersResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/partners/bulk/approve");
+    }
+
+    /**
+     * Rejects up to 100 partners with an optional shared rejection note. Each id is processed on its own and the response reports the outcome per id.
+     *
+     * @param {ToltApi.BulkRejectPartnersRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.bulkRejectPartners({
+     *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+     *     })
+     */
+    public bulkRejectPartners(
+        request: ToltApi.BulkRejectPartnersRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.BulkRejectPartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__bulkRejectPartners(request, requestOptions));
+    }
+
+    private async __bulkRejectPartners(
+        request: ToltApi.BulkRejectPartnersRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.BulkRejectPartnersResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                "v2/partners/bulk/reject",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.BulkRejectPartnersResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/partners/bulk/reject");
+    }
+
+    /**
      * @param {ToltApi.ListPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -49,7 +210,13 @@ export class PartnersClient {
         const {
             limit,
             order,
+            sort,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter,
+            created_before: createdBefore,
+            updated_after: updatedAfter,
+            updated_before: updatedBefore,
             status,
             program_id: programId,
             group_id: groupId,
@@ -58,7 +225,13 @@ export class PartnersClient {
         const _queryParams: Record<string, unknown> = {
             limit,
             order: order != null ? order : undefined,
+            sort: sort != null ? sort : undefined,
             starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter != null ? createdAfter : undefined,
+            created_before: createdBefore != null ? createdBefore : undefined,
+            updated_after: updatedAfter != null ? updatedAfter : undefined,
+            updated_before: updatedBefore != null ? updatedBefore : undefined,
             status: status != null ? status : undefined,
             program_id: programId,
             group_id: groupId,
@@ -100,6 +273,11 @@ export class PartnersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -113,11 +291,96 @@ export class PartnersClient {
     }
 
     /**
+     * Creates an onboarded partner together with their referral link. The link value defaults to a slug of the partner's name or email and the parameter to the program's first link parameter. Omit group_id to place the partner in the program's default group.
+     *
+     * @param {ToltApi.CreatePartnerRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.createPartner({
+     *         email: "sam@acme.com",
+     *         program_id: "prg_YRsbPDAK"
+     *     })
+     */
+    public createPartner(
+        request: ToltApi.CreatePartnerRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.CreatePartnerResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createPartner(request, requestOptions));
+    }
+
+    private async __createPartner(
+        request: ToltApi.CreatePartnerRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.CreatePartnerResponse>> {
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                "v2/partners",
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.CreatePartnerResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/partners");
+    }
+
+    /**
      * @param {ToltApi.GetPartnerRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -170,6 +433,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -183,11 +451,99 @@ export class PartnersClient {
     }
 
     /**
+     * Edits profile fields and group membership. Status changes go through the approve, reject and suspend actions.
+     *
+     * @param {ToltApi.UpdatePartnerRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.updatePartner({
+     *         id: "id"
+     *     })
+     */
+    public updatePartner(
+        request: ToltApi.UpdatePartnerRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.UpdatePartnerResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__updatePartner(request, requestOptions));
+    }
+
+    private async __updatePartner(
+        request: ToltApi.UpdatePartnerRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.UpdatePartnerResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                `v2/partners/${core.url.encodePathParam(id)}`,
+            ),
+            method: "PUT",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.UpdatePartnerResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 404:
+                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "PUT", "/v2/partners/{id}");
+    }
+
+    /**
      * @param {ToltApi.ApprovePartnerRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -240,6 +596,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -259,6 +620,7 @@ export class PartnersClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -316,6 +678,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,
@@ -335,6 +702,7 @@ export class PartnersClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
@@ -392,6 +760,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 default:
                     throw new errors.ToltApiError({
                         statusCode: _response.error.statusCode,

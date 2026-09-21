@@ -8,5 +8,5 @@
  */
 export interface RejectPartnerRequest {
     id: string;
-    rejectionNote?: string | null;
+    rejection_note?: string | null;
 }

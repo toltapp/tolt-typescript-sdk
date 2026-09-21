@@ -2,9 +2,8 @@
 
 import type * as ToltApi from "../../../index.js";
 
-export interface ListClicksResponse {
+export interface BulkApproveCommissionsResponse {
     success: boolean;
     message: string;
-    data: ToltApi.Click[];
-    has_more: boolean;
+    data: ToltApi.BulkResult;
 }

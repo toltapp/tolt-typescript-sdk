@@ -7,4 +7,8 @@ export interface ListLinksResponse {
     message: string;
     data: ToltApi.Link[];
     has_more: boolean;
+    /** Opaque cursor marking the last item on this page. Pass it as starting_after to continue. Null when the page is empty. */
+    next_cursor: string | null;
+    /** Opaque cursor marking the first item on this page. Pass it as ending_before to page backward. Null when the page is empty. */
+    prev_cursor: string | null;
 }

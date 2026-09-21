@@ -5,16 +5,16 @@ export interface Flow {
     name: string | null;
     description: string | null;
     event: string | null;
-    actionType: string | null;
+    action_type: string | null;
     action?: unknown | undefined;
     conditions?: unknown | undefined;
-    programId: string | null;
-    groupId: string | null;
-    campaignId: string | null;
+    program_id: string | null;
+    group_id: string | null;
+    campaign_id: string | null;
     active: boolean | null;
-    partnerOverrides?: unknown | undefined;
-    linkOverrides?: unknown | undefined;
+    partner_overrides?: unknown | undefined;
+    link_overrides?: unknown | undefined;
     options?: unknown | undefined;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
 }

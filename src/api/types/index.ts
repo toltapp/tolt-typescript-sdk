@@ -1,5 +1,7 @@
+export * from "./BulkResult.js";
 export * from "./Click.js";
 export * from "./Commission.js";
+export * from "./CreatedPartner.js";
 export * from "./Customer.js";
 export * from "./EmbedToken.js";
 export * from "./Error_.js";

@@ -14,7 +14,7 @@ export interface UpdateCommissionRequest {
     revenue?: number;
     status?: string | null;
     source?: string | null;
-    chargeId?: string | null;
-    transactionId?: string | null;
-    createdAt?: string;
+    charge_id?: string | null;
+    transaction_id?: string | null;
+    created_at?: string;
 }
