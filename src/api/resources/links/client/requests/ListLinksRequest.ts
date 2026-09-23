@@ -25,5 +25,7 @@ export interface ListLinksRequest {
     updated_before?: string;
     program_id?: string;
     partner_id?: string;
+    param?: string;
+    value?: string;
     search?: string;
 }

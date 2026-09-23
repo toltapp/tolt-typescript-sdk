@@ -59,6 +59,8 @@ export class LinksClient {
             updated_before: updatedBefore,
             program_id: programId,
             partner_id: partnerId,
+            param,
+            value,
             search,
         } = request;
         const _queryParams: Record<string, unknown> = {
@@ -73,6 +75,8 @@ export class LinksClient {
             updated_before: updatedBefore != null ? updatedBefore : undefined,
             program_id: programId,
             partner_id: partnerId,
+            param,
+            value,
             search,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
