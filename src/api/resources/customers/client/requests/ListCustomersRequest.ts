@@ -26,6 +26,8 @@ export interface ListCustomersRequest {
     program_id?: string;
     partner_id?: string;
     customer_id?: string;
-    status?: string;
+    status?: ToltApi.ListCustomersRequestStatus;
     search?: string;
+    click_id?: string;
+    link_id?: string;
 }

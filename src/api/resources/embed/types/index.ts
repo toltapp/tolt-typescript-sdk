@@ -1,1 +1,1 @@
-export * from "./CreateEmbedTokenResponse.js";
+export * from "./CreateTokenEmbedResponse.js";

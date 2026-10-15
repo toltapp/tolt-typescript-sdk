@@ -26,7 +26,7 @@ export class EmbedClient {
     /**
      * Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser.
      *
-     * @param {ToltApi.CreateEmbedTokenRequest} request
+     * @param {ToltApi.CreateTokenEmbedRequest} request
      * @param {EmbedClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -37,19 +37,19 @@ export class EmbedClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.embed.createEmbedToken()
+     *     await client.embed.createToken()
      */
-    public createEmbedToken(
-        request: ToltApi.CreateEmbedTokenRequest = {},
+    public createToken(
+        request: ToltApi.CreateTokenEmbedRequest = {},
         requestOptions?: EmbedClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateEmbedTokenResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createEmbedToken(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateTokenEmbedResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__createToken(request, requestOptions));
     }
 
-    private async __createEmbedToken(
-        request: ToltApi.CreateEmbedTokenRequest = {},
+    private async __createToken(
+        request: ToltApi.CreateTokenEmbedRequest = {},
         requestOptions?: EmbedClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateEmbedTokenResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateTokenEmbedResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -76,7 +76,7 @@ export class EmbedClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateEmbedTokenResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateTokenEmbedResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

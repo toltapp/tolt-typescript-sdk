@@ -34,16 +34,16 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.listTransactions()
+     *     await client.transactions.list()
      */
-    public listTransactions(
+    public list(
         request: ToltApi.ListTransactionsRequest = {},
         requestOptions?: TransactionsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListTransactionsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listTransactions(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listTransactions(
+    private async __list(
         request: ToltApi.ListTransactionsRequest = {},
         requestOptions?: TransactionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListTransactionsResponse>> {
@@ -133,7 +133,9 @@ export class TransactionsClient {
     }
 
     /**
-     * @param {ToltApi.CreateTransactionRequest} request
+     * Supports historical created_at values. product_id and product_name are stored and returned in product_ids and product_names arrays.
+     *
+     * @param {ToltApi.CreateTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -143,22 +145,22 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.createTransaction({
+     *     await client.transactions.create({
      *         amount: 1,
      *         customer_id: "customer_id"
      *     })
      */
-    public createTransaction(
-        request: ToltApi.CreateTransactionRequest,
+    public create(
+        request: ToltApi.CreateTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateTransactionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createTransaction(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createTransaction(
-        request: ToltApi.CreateTransactionRequest,
+    private async __create(
+        request: ToltApi.CreateTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateTransactionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateTransactionsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -185,7 +187,7 @@ export class TransactionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateTransactionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateTransactionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -212,7 +214,7 @@ export class TransactionsClient {
     }
 
     /**
-     * @param {ToltApi.GetTransactionRequest} request
+     * @param {ToltApi.GetTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -222,21 +224,21 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.getTransaction({
+     *     await client.transactions.get({
      *         id: "id"
      *     })
      */
-    public getTransaction(
-        request: ToltApi.GetTransactionRequest,
+    public get(
+        request: ToltApi.GetTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetTransactionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getTransaction(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getTransaction(
-        request: ToltApi.GetTransactionRequest,
+    private async __get(
+        request: ToltApi.GetTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetTransactionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetTransactionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -261,7 +263,7 @@ export class TransactionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetTransactionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetTransactionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -288,7 +290,7 @@ export class TransactionsClient {
     }
 
     /**
-     * @param {ToltApi.UpdateTransactionRequest} request
+     * @param {ToltApi.UpdateTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -300,21 +302,21 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.updateTransaction({
+     *     await client.transactions.update({
      *         id: "id"
      *     })
      */
-    public updateTransaction(
-        request: ToltApi.UpdateTransactionRequest,
+    public update(
+        request: ToltApi.UpdateTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateTransactionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updateTransaction(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdateTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updateTransaction(
-        request: ToltApi.UpdateTransactionRequest,
+    private async __update(
+        request: ToltApi.UpdateTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateTransactionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateTransactionsResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -342,7 +344,7 @@ export class TransactionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateTransactionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateTransactionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -373,7 +375,7 @@ export class TransactionsClient {
     }
 
     /**
-     * @param {ToltApi.DeleteTransactionRequest} request
+     * @param {ToltApi.DeleteTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -384,21 +386,21 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.deleteTransaction({
+     *     await client.transactions.delete({
      *         id: "id"
      *     })
      */
-    public deleteTransaction(
-        request: ToltApi.DeleteTransactionRequest,
+    public delete(
+        request: ToltApi.DeleteTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteTransactionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteTransaction(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeleteTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __deleteTransaction(
-        request: ToltApi.DeleteTransactionRequest,
+    private async __delete(
+        request: ToltApi.DeleteTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteTransactionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteTransactionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -423,7 +425,7 @@ export class TransactionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteTransactionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteTransactionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -452,7 +454,9 @@ export class TransactionsClient {
     }
 
     /**
-     * @param {ToltApi.RefundTransactionRequest} request
+     * Unpaid commissions are zeroed while preserving their original deducted commission amount, and affected draft invoices are recalculated. Paid commissions and commissions linked to legacy autopayout invoices receive a negative reversal.
+     *
+     * @param {ToltApi.RefundTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -463,21 +467,21 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.refundTransaction({
+     *     await client.transactions.refund({
      *         id: "id"
      *     })
      */
-    public refundTransaction(
-        request: ToltApi.RefundTransactionRequest,
+    public refund(
+        request: ToltApi.RefundTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.RefundTransactionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__refundTransaction(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.RefundTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__refund(request, requestOptions));
     }
 
-    private async __refundTransaction(
-        request: ToltApi.RefundTransactionRequest,
+    private async __refund(
+        request: ToltApi.RefundTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.RefundTransactionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.RefundTransactionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -502,7 +506,7 @@ export class TransactionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.RefundTransactionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.RefundTransactionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -533,7 +537,7 @@ export class TransactionsClient {
     /**
      * Re-queues the transaction for asynchronous flow processing. Only transactions without an existing commission are eligible, so a rerun cannot create a duplicate commission.
      *
-     * @param {ToltApi.RerunTransactionFlowsRequest} request
+     * @param {ToltApi.RerunFlowsTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -544,21 +548,21 @@ export class TransactionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.transactions.rerunTransactionFlows({
+     *     await client.transactions.rerunFlows({
      *         id: "id"
      *     })
      */
-    public rerunTransactionFlows(
-        request: ToltApi.RerunTransactionFlowsRequest,
+    public rerunFlows(
+        request: ToltApi.RerunFlowsTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.RerunTransactionFlowsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__rerunTransactionFlows(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.RerunFlowsTransactionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__rerunFlows(request, requestOptions));
     }
 
-    private async __rerunTransactionFlows(
-        request: ToltApi.RerunTransactionFlowsRequest,
+    private async __rerunFlows(
+        request: ToltApi.RerunFlowsTransactionsRequest,
         requestOptions?: TransactionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.RerunTransactionFlowsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.RerunFlowsTransactionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -584,7 +588,7 @@ export class TransactionsClient {
         });
         if (_response.ok) {
             return {
-                data: _response.body as ToltApi.RerunTransactionFlowsResponse,
+                data: _response.body as ToltApi.RerunFlowsTransactionsResponse,
                 rawResponse: _response.rawResponse,
             };
         }

@@ -33,16 +33,16 @@ export class ProgramsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.programs.listPrograms()
+     *     await client.programs.list()
      */
-    public listPrograms(
+    public list(
         request: ToltApi.ListProgramsRequest = {},
         requestOptions?: ProgramsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListProgramsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listPrograms(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listPrograms(
+    private async __list(
         request: ToltApi.ListProgramsRequest = {},
         requestOptions?: ProgramsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListProgramsResponse>> {
@@ -124,7 +124,7 @@ export class ProgramsClient {
     }
 
     /**
-     * @param {ToltApi.GetProgramRequest} request
+     * @param {ToltApi.GetProgramsRequest} request
      * @param {ProgramsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -134,21 +134,21 @@ export class ProgramsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.programs.getProgram({
+     *     await client.programs.get({
      *         id: "id"
      *     })
      */
-    public getProgram(
-        request: ToltApi.GetProgramRequest,
+    public get(
+        request: ToltApi.GetProgramsRequest,
         requestOptions?: ProgramsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetProgramResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getProgram(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetProgramsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getProgram(
-        request: ToltApi.GetProgramRequest,
+    private async __get(
+        request: ToltApi.GetProgramsRequest,
         requestOptions?: ProgramsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetProgramResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetProgramsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -173,7 +173,7 @@ export class ProgramsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetProgramResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetProgramsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

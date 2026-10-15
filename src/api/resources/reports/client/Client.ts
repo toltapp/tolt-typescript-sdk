@@ -23,7 +23,7 @@ export class ReportsClient {
     }
 
     /**
-     * @param {ToltApi.ReportsOverviewRequest} request
+     * @param {ToltApi.OverviewReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -36,16 +36,16 @@ export class ReportsClient {
      *     await client.reports.overview()
      */
     public overview(
-        request: ToltApi.ReportsOverviewRequest = {},
+        request: ToltApi.OverviewReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ReportsOverviewResponse> {
+    ): core.HttpResponsePromise<ToltApi.OverviewReportsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__overview(request, requestOptions));
     }
 
     private async __overview(
-        request: ToltApi.ReportsOverviewRequest = {},
+        request: ToltApi.OverviewReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ReportsOverviewResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.OverviewReportsResponse>> {
         const { program_id: programId, start_date: startDate, end_date: endDate } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
@@ -79,7 +79,7 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ReportsOverviewResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.OverviewReportsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -106,7 +106,7 @@ export class ReportsClient {
     }
 
     /**
-     * @param {ToltApi.ReportsPartnersRequest} request
+     * @param {ToltApi.PartnersReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -119,21 +119,31 @@ export class ReportsClient {
      *     await client.reports.partners()
      */
     public partners(
-        request: ToltApi.ReportsPartnersRequest = {},
+        request: ToltApi.PartnersReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ReportsPartnersResponse> {
+    ): core.HttpResponsePromise<ToltApi.PartnersReportsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__partners(request, requestOptions));
     }
 
     private async __partners(
-        request: ToltApi.ReportsPartnersRequest = {},
+        request: ToltApi.PartnersReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ReportsPartnersResponse>> {
-        const { program_id: programId, start_date: startDate, end_date: endDate, limit, offset, sort, order } = request;
+    ): Promise<core.WithRawResponse<ToltApi.PartnersReportsResponse>> {
+        const {
+            program_id: programId,
+            start_date: startDate,
+            end_date: endDate,
+            currency,
+            limit,
+            offset,
+            sort,
+            order,
+        } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
             start_date: startDate != null ? startDate : undefined,
             end_date: endDate != null ? endDate : undefined,
+            currency,
             limit,
             offset,
             sort: sort != null ? sort : undefined,
@@ -166,7 +176,7 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ReportsPartnersResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.PartnersReportsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -193,7 +203,7 @@ export class ReportsClient {
     }
 
     /**
-     * @param {ToltApi.ReportsLinksRequest} request
+     * @param {ToltApi.LinksReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -206,21 +216,31 @@ export class ReportsClient {
      *     await client.reports.links()
      */
     public links(
-        request: ToltApi.ReportsLinksRequest = {},
+        request: ToltApi.LinksReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ReportsLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.LinksReportsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__links(request, requestOptions));
     }
 
     private async __links(
-        request: ToltApi.ReportsLinksRequest = {},
+        request: ToltApi.LinksReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ReportsLinksResponse>> {
-        const { program_id: programId, start_date: startDate, end_date: endDate, limit, offset, sort, order } = request;
+    ): Promise<core.WithRawResponse<ToltApi.LinksReportsResponse>> {
+        const {
+            program_id: programId,
+            start_date: startDate,
+            end_date: endDate,
+            currency,
+            limit,
+            offset,
+            sort,
+            order,
+        } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
             start_date: startDate != null ? startDate : undefined,
             end_date: endDate != null ? endDate : undefined,
+            currency,
             limit,
             offset,
             sort: sort != null ? sort : undefined,
@@ -253,7 +273,7 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ReportsLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.LinksReportsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -280,7 +300,7 @@ export class ReportsClient {
     }
 
     /**
-     * @param {ToltApi.ReportsTimeseriesRequest} request
+     * @param {ToltApi.TimeseriesReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -293,22 +313,23 @@ export class ReportsClient {
      *     await client.reports.timeseries()
      */
     public timeseries(
-        request: ToltApi.ReportsTimeseriesRequest = {},
+        request: ToltApi.TimeseriesReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ReportsTimeseriesResponse> {
+    ): core.HttpResponsePromise<ToltApi.TimeseriesReportsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__timeseries(request, requestOptions));
     }
 
     private async __timeseries(
-        request: ToltApi.ReportsTimeseriesRequest = {},
+        request: ToltApi.TimeseriesReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ReportsTimeseriesResponse>> {
-        const { program_id: programId, start_date: startDate, end_date: endDate, granularity } = request;
+    ): Promise<core.WithRawResponse<ToltApi.TimeseriesReportsResponse>> {
+        const { program_id: programId, start_date: startDate, end_date: endDate, granularity, currency } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
             start_date: startDate != null ? startDate : undefined,
             end_date: endDate != null ? endDate : undefined,
             granularity: granularity != null ? granularity : undefined,
+            currency,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -337,7 +358,7 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ReportsTimeseriesResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.TimeseriesReportsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -364,7 +385,7 @@ export class ReportsClient {
     }
 
     /**
-     * @param {ToltApi.ReportsCustomerStatsRequest} request
+     * @param {ToltApi.CustomerStatsReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -377,16 +398,16 @@ export class ReportsClient {
      *     await client.reports.customerStats()
      */
     public customerStats(
-        request: ToltApi.ReportsCustomerStatsRequest = {},
+        request: ToltApi.CustomerStatsReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ReportsCustomerStatsResponse> {
+    ): core.HttpResponsePromise<ToltApi.CustomerStatsReportsResponse> {
         return core.HttpResponsePromise.fromPromise(this.__customerStats(request, requestOptions));
     }
 
     private async __customerStats(
-        request: ToltApi.ReportsCustomerStatsRequest = {},
+        request: ToltApi.CustomerStatsReportsRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ReportsCustomerStatsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CustomerStatsReportsResponse>> {
         const { program_id: programId, start_date: startDate, end_date: endDate } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
@@ -420,7 +441,7 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ReportsCustomerStatsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CustomerStatsReportsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

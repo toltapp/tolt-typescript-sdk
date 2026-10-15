@@ -1,1 +1,1 @@
-export type { CreateEmbedTokenRequest } from "./CreateEmbedTokenRequest.js";
+export type { CreateTokenEmbedRequest } from "./CreateTokenEmbedRequest.js";

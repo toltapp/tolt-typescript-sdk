@@ -34,16 +34,16 @@ export class CustomersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.listCustomers()
+     *     await client.customers.list()
      */
-    public listCustomers(
+    public list(
         request: ToltApi.ListCustomersRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListCustomersResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listCustomers(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listCustomers(
+    private async __list(
         request: ToltApi.ListCustomersRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListCustomersResponse>> {
@@ -62,6 +62,8 @@ export class CustomersClient {
             customer_id: customerId,
             status,
             search,
+            click_id: clickId,
+            link_id: linkId,
         } = request;
         const _queryParams: Record<string, unknown> = {
             limit,
@@ -76,8 +78,10 @@ export class CustomersClient {
             program_id: programId,
             partner_id: partnerId,
             customer_id: customerId,
-            status,
+            status: status != null ? status : undefined,
             search,
+            click_id: clickId,
+            link_id: linkId,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -133,29 +137,30 @@ export class CustomersClient {
     }
 
     /**
-     * @param {ToltApi.CreateCustomerRequest} request
+     * @param {ToltApi.CreateCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ConflictError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.createCustomer()
+     *     await client.customers.create()
      */
-    public createCustomer(
-        request: ToltApi.CreateCustomerRequest = {},
+    public create(
+        request: ToltApi.CreateCustomersRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateCustomerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createCustomer(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateCustomersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createCustomer(
-        request: ToltApi.CreateCustomerRequest = {},
+    private async __create(
+        request: ToltApi.CreateCustomersRequest = {},
         requestOptions?: CustomersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateCustomerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateCustomersResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -182,7 +187,7 @@ export class CustomersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateCustomerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateCustomersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -191,6 +196,8 @@ export class CustomersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -209,7 +216,7 @@ export class CustomersClient {
     }
 
     /**
-     * @param {ToltApi.GetCustomerRequest} request
+     * @param {ToltApi.GetCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -219,21 +226,21 @@ export class CustomersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.getCustomer({
+     *     await client.customers.get({
      *         id: "id"
      *     })
      */
-    public getCustomer(
-        request: ToltApi.GetCustomerRequest,
+    public get(
+        request: ToltApi.GetCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetCustomerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getCustomer(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetCustomersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getCustomer(
-        request: ToltApi.GetCustomerRequest,
+    private async __get(
+        request: ToltApi.GetCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetCustomerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetCustomersResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -258,7 +265,7 @@ export class CustomersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetCustomerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetCustomersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -285,32 +292,33 @@ export class CustomersClient {
     }
 
     /**
-     * @param {ToltApi.UpdateCustomerRequest} request
+     * @param {ToltApi.UpdateCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ConflictError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.updateCustomer({
+     *     await client.customers.update({
      *         id: "id"
      *     })
      */
-    public updateCustomer(
-        request: ToltApi.UpdateCustomerRequest,
+    public update(
+        request: ToltApi.UpdateCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateCustomerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updateCustomer(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdateCustomersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updateCustomer(
-        request: ToltApi.UpdateCustomerRequest,
+    private async __update(
+        request: ToltApi.UpdateCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateCustomerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateCustomersResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -338,7 +346,7 @@ export class CustomersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateCustomerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateCustomersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -349,6 +357,8 @@ export class CustomersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -367,9 +377,10 @@ export class CustomersClient {
     }
 
     /**
-     * @param {ToltApi.DeleteCustomerRequest} request
+     * @param {ToltApi.DeleteCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.TooManyRequestsError}
@@ -377,21 +388,21 @@ export class CustomersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.deleteCustomer({
+     *     await client.customers.delete({
      *         id: "id"
      *     })
      */
-    public deleteCustomer(
-        request: ToltApi.DeleteCustomerRequest,
+    public delete(
+        request: ToltApi.DeleteCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteCustomerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteCustomer(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeleteCustomersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __deleteCustomer(
-        request: ToltApi.DeleteCustomerRequest,
+    private async __delete(
+        request: ToltApi.DeleteCustomersRequest,
         requestOptions?: CustomersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteCustomerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteCustomersResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -416,11 +427,13 @@ export class CustomersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteCustomerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteCustomersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
