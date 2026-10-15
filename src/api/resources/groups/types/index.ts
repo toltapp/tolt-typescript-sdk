@@ -1,4 +1,4 @@
-export * from "./GetGroupResponse.js";
+export * from "./GetGroupsResponse.js";
 export * from "./ListGroupsRequestDefault.js";
 export * from "./ListGroupsRequestOrder.js";
 export * from "./ListGroupsRequestSort.js";

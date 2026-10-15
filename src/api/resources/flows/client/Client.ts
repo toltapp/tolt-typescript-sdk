@@ -33,16 +33,16 @@ export class FlowsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.flows.listFlows()
+     *     await client.flows.list()
      */
-    public listFlows(
+    public list(
         request: ToltApi.ListFlowsRequest = {},
         requestOptions?: FlowsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListFlowsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listFlows(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listFlows(
+    private async __list(
         request: ToltApi.ListFlowsRequest = {},
         requestOptions?: FlowsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListFlowsResponse>> {
@@ -134,7 +134,7 @@ export class FlowsClient {
     }
 
     /**
-     * @param {ToltApi.GetFlowRequest} request
+     * @param {ToltApi.GetFlowsRequest} request
      * @param {FlowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -144,21 +144,21 @@ export class FlowsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.flows.getFlow({
+     *     await client.flows.get({
      *         id: "id"
      *     })
      */
-    public getFlow(
-        request: ToltApi.GetFlowRequest,
+    public get(
+        request: ToltApi.GetFlowsRequest,
         requestOptions?: FlowsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetFlowResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getFlow(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetFlowsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getFlow(
-        request: ToltApi.GetFlowRequest,
+    private async __get(
+        request: ToltApi.GetFlowsRequest,
         requestOptions?: FlowsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetFlowResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetFlowsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -183,7 +183,7 @@ export class FlowsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetFlowResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetFlowsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

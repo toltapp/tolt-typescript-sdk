@@ -34,16 +34,16 @@ export class PromotionCodesClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.promotionCodes.listPromotionCodes()
+     *     await client.promotionCodes.list()
      */
-    public listPromotionCodes(
+    public list(
         request: ToltApi.ListPromotionCodesRequest = {},
         requestOptions?: PromotionCodesClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListPromotionCodesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listPromotionCodes(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listPromotionCodes(
+    private async __list(
         request: ToltApi.ListPromotionCodesRequest = {},
         requestOptions?: PromotionCodesClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListPromotionCodesResponse>> {
@@ -74,7 +74,7 @@ export class PromotionCodesClient {
             updated_before: updatedBefore != null ? updatedBefore : undefined,
             program_id: programId,
             partner_id: partnerId,
-            type: type_,
+            type: type_ != null ? type_ : undefined,
             search,
         };
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -131,7 +131,7 @@ export class PromotionCodesClient {
     }
 
     /**
-     * @param {ToltApi.CreatePromotionCodeRequest} request
+     * @param {ToltApi.CreatePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -141,22 +141,22 @@ export class PromotionCodesClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.promotionCodes.createPromotionCode({
+     *     await client.promotionCodes.create({
      *         code: "code",
      *         partner_id: "partner_id"
      *     })
      */
-    public createPromotionCode(
-        request: ToltApi.CreatePromotionCodeRequest,
+    public create(
+        request: ToltApi.CreatePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreatePromotionCodeResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createPromotionCode(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreatePromotionCodesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createPromotionCode(
-        request: ToltApi.CreatePromotionCodeRequest,
+    private async __create(
+        request: ToltApi.CreatePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreatePromotionCodeResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreatePromotionCodesResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -183,7 +183,7 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreatePromotionCodeResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreatePromotionCodesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -210,7 +210,7 @@ export class PromotionCodesClient {
     }
 
     /**
-     * @param {ToltApi.GetPromotionCodeRequest} request
+     * @param {ToltApi.GetPromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -220,21 +220,21 @@ export class PromotionCodesClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.promotionCodes.getPromotionCode({
+     *     await client.promotionCodes.get({
      *         id: "id"
      *     })
      */
-    public getPromotionCode(
-        request: ToltApi.GetPromotionCodeRequest,
+    public get(
+        request: ToltApi.GetPromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetPromotionCodeResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getPromotionCode(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetPromotionCodesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getPromotionCode(
-        request: ToltApi.GetPromotionCodeRequest,
+    private async __get(
+        request: ToltApi.GetPromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetPromotionCodeResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetPromotionCodesResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -259,7 +259,7 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetPromotionCodeResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetPromotionCodesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -286,7 +286,7 @@ export class PromotionCodesClient {
     }
 
     /**
-     * @param {ToltApi.UpdatePromotionCodeRequest} request
+     * @param {ToltApi.UpdatePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -297,21 +297,21 @@ export class PromotionCodesClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.promotionCodes.updatePromotionCode({
+     *     await client.promotionCodes.update({
      *         id: "id"
      *     })
      */
-    public updatePromotionCode(
-        request: ToltApi.UpdatePromotionCodeRequest,
+    public update(
+        request: ToltApi.UpdatePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdatePromotionCodeResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updatePromotionCode(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdatePromotionCodesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updatePromotionCode(
-        request: ToltApi.UpdatePromotionCodeRequest,
+    private async __update(
+        request: ToltApi.UpdatePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdatePromotionCodeResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdatePromotionCodesResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -339,7 +339,7 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdatePromotionCodeResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdatePromotionCodesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -368,7 +368,7 @@ export class PromotionCodesClient {
     }
 
     /**
-     * @param {ToltApi.DeletePromotionCodeRequest} request
+     * @param {ToltApi.DeletePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -378,21 +378,21 @@ export class PromotionCodesClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.promotionCodes.deletePromotionCode({
+     *     await client.promotionCodes.delete({
      *         id: "id"
      *     })
      */
-    public deletePromotionCode(
-        request: ToltApi.DeletePromotionCodeRequest,
+    public delete(
+        request: ToltApi.DeletePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeletePromotionCodeResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deletePromotionCode(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeletePromotionCodesResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __deletePromotionCode(
-        request: ToltApi.DeletePromotionCodeRequest,
+    private async __delete(
+        request: ToltApi.DeletePromotionCodesRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeletePromotionCodeResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeletePromotionCodesResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -417,7 +417,7 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeletePromotionCodeResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeletePromotionCodesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

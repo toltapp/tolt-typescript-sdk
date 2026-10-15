@@ -24,7 +24,7 @@ export class CommissionsClient {
     }
 
     /**
-     * Approves up to 100 commissions. Each id is processed on its own and the response reports the outcome per id, with the error code for any that were refused.
+     * Approves up to 100 commissions and reports the outcome per id. Successful changes and affected draft invoice totals commit together.
      *
      * @param {ToltApi.BulkApproveCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -36,18 +36,18 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.bulkApproveCommissions({
+     *     await client.commissions.bulkApprove({
      *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
      *     })
      */
-    public bulkApproveCommissions(
+    public bulkApprove(
         request: ToltApi.BulkApproveCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.BulkApproveCommissionsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__bulkApproveCommissions(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__bulkApprove(request, requestOptions));
     }
 
-    private async __bulkApproveCommissions(
+    private async __bulkApprove(
         request: ToltApi.BulkApproveCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.BulkApproveCommissionsResponse>> {
@@ -107,7 +107,7 @@ export class CommissionsClient {
     }
 
     /**
-     * Declines up to 100 commissions. Each id is processed on its own and the response reports the outcome per id, with the error code for any that were refused.
+     * Declines up to 100 commissions and reports the outcome per id. Successful changes and affected draft invoice totals commit together.
      *
      * @param {ToltApi.BulkDeclineCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -119,18 +119,18 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.bulkDeclineCommissions({
+     *     await client.commissions.bulkDecline({
      *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
      *     })
      */
-    public bulkDeclineCommissions(
+    public bulkDecline(
         request: ToltApi.BulkDeclineCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.BulkDeclineCommissionsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__bulkDeclineCommissions(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__bulkDecline(request, requestOptions));
     }
 
-    private async __bulkDeclineCommissions(
+    private async __bulkDecline(
         request: ToltApi.BulkDeclineCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.BulkDeclineCommissionsResponse>> {
@@ -200,16 +200,16 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.listCommissions()
+     *     await client.commissions.list()
      */
-    public listCommissions(
+    public list(
         request: ToltApi.ListCommissionsRequest = {},
         requestOptions?: CommissionsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListCommissionsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listCommissions(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listCommissions(
+    private async __list(
         request: ToltApi.ListCommissionsRequest = {},
         requestOptions?: CommissionsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListCommissionsResponse>> {
@@ -303,7 +303,9 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.CreateCommissionRequest} request
+     * Supports historical created_at values. Status defaults to approved when omitted.
+     *
+     * @param {ToltApi.CreateCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -314,21 +316,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.createCommission({
+     *     await client.commissions.create({
      *         "key": "value"
      *     })
      */
-    public createCommission(
-        request: ToltApi.CreateCommissionRequest,
+    public create(
+        request: ToltApi.CreateCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createCommission(
-        request: ToltApi.CreateCommissionRequest,
+    private async __create(
+        request: ToltApi.CreateCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateCommissionsResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -355,7 +357,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -384,7 +386,7 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.GetCommissionRequest} request
+     * @param {ToltApi.GetCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -394,21 +396,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.getCommission({
+     *     await client.commissions.get({
      *         id: "id"
      *     })
      */
-    public getCommission(
-        request: ToltApi.GetCommissionRequest,
+    public get(
+        request: ToltApi.GetCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getCommission(
-        request: ToltApi.GetCommissionRequest,
+    private async __get(
+        request: ToltApi.GetCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetCommissionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -433,7 +435,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -460,7 +462,9 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.UpdateCommissionRequest} request
+     * Unpaid commissions can be changed unless linked to a confirmed invoice or legacy autopayout invoice. Affected draft invoice totals are recalculated.
+     *
+     * @param {ToltApi.UpdateCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -472,21 +476,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.updateCommission({
+     *     await client.commissions.update({
      *         id: "id"
      *     })
      */
-    public updateCommission(
-        request: ToltApi.UpdateCommissionRequest,
+    public update(
+        request: ToltApi.UpdateCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updateCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdateCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updateCommission(
-        request: ToltApi.UpdateCommissionRequest,
+    private async __update(
+        request: ToltApi.UpdateCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateCommissionsResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -514,7 +518,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -545,7 +549,7 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.DeleteCommissionRequest} request
+     * @param {ToltApi.DeleteCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -557,21 +561,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.deleteCommission({
+     *     await client.commissions.delete({
      *         id: "id"
      *     })
      */
-    public deleteCommission(
-        request: ToltApi.DeleteCommissionRequest,
+    public delete(
+        request: ToltApi.DeleteCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeleteCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __deleteCommission(
-        request: ToltApi.DeleteCommissionRequest,
+    private async __delete(
+        request: ToltApi.DeleteCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteCommissionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -596,7 +600,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -627,7 +631,7 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.ApproveCommissionRequest} request
+     * @param {ToltApi.ApproveCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -639,21 +643,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.approveCommission({
+     *     await client.commissions.approve({
      *         id: "id"
      *     })
      */
-    public approveCommission(
-        request: ToltApi.ApproveCommissionRequest,
+    public approve(
+        request: ToltApi.ApproveCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ApproveCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__approveCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.ApproveCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__approve(request, requestOptions));
     }
 
-    private async __approveCommission(
-        request: ToltApi.ApproveCommissionRequest,
+    private async __approve(
+        request: ToltApi.ApproveCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ApproveCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ApproveCommissionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -678,7 +682,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ApproveCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ApproveCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -709,7 +713,7 @@ export class CommissionsClient {
     }
 
     /**
-     * @param {ToltApi.DeclineCommissionRequest} request
+     * @param {ToltApi.DeclineCommissionsRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -721,21 +725,21 @@ export class CommissionsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.commissions.declineCommission({
+     *     await client.commissions.decline({
      *         id: "id"
      *     })
      */
-    public declineCommission(
-        request: ToltApi.DeclineCommissionRequest,
+    public decline(
+        request: ToltApi.DeclineCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeclineCommissionResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__declineCommission(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeclineCommissionsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__decline(request, requestOptions));
     }
 
-    private async __declineCommission(
-        request: ToltApi.DeclineCommissionRequest,
+    private async __decline(
+        request: ToltApi.DeclineCommissionsRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeclineCommissionResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeclineCommissionsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -760,7 +764,7 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeclineCommissionResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeclineCommissionsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

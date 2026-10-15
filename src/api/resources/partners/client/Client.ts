@@ -36,18 +36,18 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.bulkApprovePartners({
+     *     await client.partners.bulkApprove({
      *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
      *     })
      */
-    public bulkApprovePartners(
+    public bulkApprove(
         request: ToltApi.BulkApprovePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.BulkApprovePartnersResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__bulkApprovePartners(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__bulkApprove(request, requestOptions));
     }
 
-    private async __bulkApprovePartners(
+    private async __bulkApprove(
         request: ToltApi.BulkApprovePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.BulkApprovePartnersResponse>> {
@@ -116,18 +116,18 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.bulkRejectPartners({
+     *     await client.partners.bulkReject({
      *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
      *     })
      */
-    public bulkRejectPartners(
+    public bulkReject(
         request: ToltApi.BulkRejectPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.BulkRejectPartnersResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__bulkRejectPartners(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__bulkReject(request, requestOptions));
     }
 
-    private async __bulkRejectPartners(
+    private async __bulkReject(
         request: ToltApi.BulkRejectPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.BulkRejectPartnersResponse>> {
@@ -194,16 +194,16 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.listPartners()
+     *     await client.partners.list()
      */
-    public listPartners(
+    public list(
         request: ToltApi.ListPartnersRequest = {},
         requestOptions?: PartnersClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListPartnersResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listPartners(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listPartners(
+    private async __list(
         request: ToltApi.ListPartnersRequest = {},
         requestOptions?: PartnersClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListPartnersResponse>> {
@@ -293,7 +293,7 @@ export class PartnersClient {
     /**
      * Creates an onboarded partner together with their referral link. The link value defaults to a slug of the partner's name or email and the parameter to the program's first link parameter. Omit group_id to place the partner in the program's default group.
      *
-     * @param {ToltApi.CreatePartnerRequest} request
+     * @param {ToltApi.CreatePartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -304,22 +304,22 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.createPartner({
+     *     await client.partners.create({
      *         email: "sam@acme.com",
      *         program_id: "prg_YRsbPDAK"
      *     })
      */
-    public createPartner(
-        request: ToltApi.CreatePartnerRequest,
+    public create(
+        request: ToltApi.CreatePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreatePartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createPartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreatePartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createPartner(
-        request: ToltApi.CreatePartnerRequest,
+    private async __create(
+        request: ToltApi.CreatePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreatePartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreatePartnersResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -346,7 +346,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreatePartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreatePartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -375,7 +375,7 @@ export class PartnersClient {
     }
 
     /**
-     * @param {ToltApi.GetPartnerRequest} request
+     * @param {ToltApi.GetPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -385,21 +385,21 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.getPartner({
+     *     await client.partners.get({
      *         id: "id"
      *     })
      */
-    public getPartner(
-        request: ToltApi.GetPartnerRequest,
+    public get(
+        request: ToltApi.GetPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetPartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getPartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetPartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getPartner(
-        request: ToltApi.GetPartnerRequest,
+    private async __get(
+        request: ToltApi.GetPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetPartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetPartnersResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -424,7 +424,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetPartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetPartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -453,7 +453,7 @@ export class PartnersClient {
     /**
      * Edits profile fields and group membership. Status changes go through the approve, reject and suspend actions.
      *
-     * @param {ToltApi.UpdatePartnerRequest} request
+     * @param {ToltApi.UpdatePartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -465,21 +465,21 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.updatePartner({
+     *     await client.partners.update({
      *         id: "id"
      *     })
      */
-    public updatePartner(
-        request: ToltApi.UpdatePartnerRequest,
+    public update(
+        request: ToltApi.UpdatePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdatePartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updatePartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdatePartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updatePartner(
-        request: ToltApi.UpdatePartnerRequest,
+    private async __update(
+        request: ToltApi.UpdatePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdatePartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdatePartnersResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -507,7 +507,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdatePartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdatePartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -538,7 +538,7 @@ export class PartnersClient {
     }
 
     /**
-     * @param {ToltApi.ApprovePartnerRequest} request
+     * @param {ToltApi.ApprovePartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -548,21 +548,21 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.approvePartner({
+     *     await client.partners.approve({
      *         id: "id"
      *     })
      */
-    public approvePartner(
-        request: ToltApi.ApprovePartnerRequest,
+    public approve(
+        request: ToltApi.ApprovePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ApprovePartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__approvePartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.ApprovePartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__approve(request, requestOptions));
     }
 
-    private async __approvePartner(
-        request: ToltApi.ApprovePartnerRequest,
+    private async __approve(
+        request: ToltApi.ApprovePartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ApprovePartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ApprovePartnersResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -587,7 +587,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ApprovePartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ApprovePartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -614,7 +614,7 @@ export class PartnersClient {
     }
 
     /**
-     * @param {ToltApi.RejectPartnerRequest} request
+     * @param {ToltApi.RejectPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -625,21 +625,21 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.rejectPartner({
+     *     await client.partners.reject({
      *         id: "id"
      *     })
      */
-    public rejectPartner(
-        request: ToltApi.RejectPartnerRequest,
+    public reject(
+        request: ToltApi.RejectPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.RejectPartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__rejectPartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.RejectPartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__reject(request, requestOptions));
     }
 
-    private async __rejectPartner(
-        request: ToltApi.RejectPartnerRequest,
+    private async __reject(
+        request: ToltApi.RejectPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.RejectPartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.RejectPartnersResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -667,7 +667,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.RejectPartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.RejectPartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -696,7 +696,7 @@ export class PartnersClient {
     }
 
     /**
-     * @param {ToltApi.SuspendPartnerRequest} request
+     * @param {ToltApi.SuspendPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -707,21 +707,21 @@ export class PartnersClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.partners.suspendPartner({
+     *     await client.partners.suspend({
      *         id: "id"
      *     })
      */
-    public suspendPartner(
-        request: ToltApi.SuspendPartnerRequest,
+    public suspend(
+        request: ToltApi.SuspendPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.SuspendPartnerResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__suspendPartner(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.SuspendPartnersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__suspend(request, requestOptions));
     }
 
-    private async __suspendPartner(
-        request: ToltApi.SuspendPartnerRequest,
+    private async __suspend(
+        request: ToltApi.SuspendPartnersRequest,
         requestOptions?: PartnersClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.SuspendPartnerResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.SuspendPartnersResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -749,7 +749,7 @@ export class PartnersClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.SuspendPartnerResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.SuspendPartnersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

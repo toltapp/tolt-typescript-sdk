@@ -24,6 +24,8 @@ export class LinksClient {
     }
 
     /**
+     * Lists ordinary links. Campaign-managed links are excluded.
+     *
      * @param {ToltApi.ListLinksRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -34,16 +36,16 @@ export class LinksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.links.listLinks()
+     *     await client.links.list()
      */
-    public listLinks(
+    public list(
         request: ToltApi.ListLinksRequest = {},
         requestOptions?: LinksClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListLinksResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listLinks(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listLinks(
+    private async __list(
         request: ToltApi.ListLinksRequest = {},
         requestOptions?: LinksClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListLinksResponse>> {
@@ -133,7 +135,7 @@ export class LinksClient {
     }
 
     /**
-     * @param {ToltApi.CreateLinkRequest} request
+     * @param {ToltApi.CreateLinksRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -143,22 +145,22 @@ export class LinksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.links.createLink({
+     *     await client.links.create({
      *         value: "value",
      *         partner_id: "partner_id"
      *     })
      */
-    public createLink(
-        request: ToltApi.CreateLinkRequest,
+    public create(
+        request: ToltApi.CreateLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateLinkResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createLink(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateLinksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createLink(
-        request: ToltApi.CreateLinkRequest,
+    private async __create(
+        request: ToltApi.CreateLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateLinkResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateLinksResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -185,7 +187,7 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateLinkResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateLinksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -212,7 +214,99 @@ export class LinksClient {
     }
 
     /**
-     * @param {ToltApi.GetLinkRequest} request
+     * Looks up a single link by its parameter and value (value matched case-insensitively). Returns 404 when none matches.
+     *
+     * @param {ToltApi.GetByParamValueLinksRequest} request
+     * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.links.getByParamValue({
+     *         param: "ref",
+     *         value: "sam"
+     *     })
+     */
+    public getByParamValue(
+        request: ToltApi.GetByParamValueLinksRequest,
+        requestOptions?: LinksClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.GetByParamValueLinksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__getByParamValue(request, requestOptions));
+    }
+
+    private async __getByParamValue(
+        request: ToltApi.GetByParamValueLinksRequest,
+        requestOptions?: LinksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.GetByParamValueLinksResponse>> {
+        const { param, value } = request;
+        const _queryParams: Record<string, unknown> = {
+            param,
+            value,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                "v2/links/by-param-value",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.GetByParamValueLinksResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 404:
+                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/links/by-param-value");
+    }
+
+    /**
+     * Gets an ordinary or campaign-managed link by ID.
+     *
+     * @param {ToltApi.GetLinksRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -222,21 +316,21 @@ export class LinksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.links.getLink({
+     *     await client.links.get({
      *         id: "id"
      *     })
      */
-    public getLink(
-        request: ToltApi.GetLinkRequest,
+    public get(
+        request: ToltApi.GetLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetLinkResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getLink(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetLinksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getLink(
-        request: ToltApi.GetLinkRequest,
+    private async __get(
+        request: ToltApi.GetLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetLinkResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetLinksResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -261,7 +355,7 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetLinkResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetLinksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -288,7 +382,9 @@ export class LinksClient {
     }
 
     /**
-     * @param {ToltApi.UpdateLinkRequest} request
+     * Updates an ordinary link. Campaign-managed links must be changed through campaigns.
+     *
+     * @param {ToltApi.UpdateLinksRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -299,21 +395,21 @@ export class LinksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.links.updateLink({
+     *     await client.links.update({
      *         id: "id"
      *     })
      */
-    public updateLink(
-        request: ToltApi.UpdateLinkRequest,
+    public update(
+        request: ToltApi.UpdateLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateLinkResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__updateLink(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.UpdateLinksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
-    private async __updateLink(
-        request: ToltApi.UpdateLinkRequest,
+    private async __update(
+        request: ToltApi.UpdateLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateLinkResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateLinksResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -341,7 +437,7 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateLinkResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateLinksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -370,9 +466,12 @@ export class LinksClient {
     }
 
     /**
-     * @param {ToltApi.DeleteLinkRequest} request
+     * Deletes an ordinary link. Campaign-managed links must be changed through campaigns.
+     *
+     * @param {ToltApi.DeleteLinksRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.TooManyRequestsError}
@@ -380,21 +479,21 @@ export class LinksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.links.deleteLink({
+     *     await client.links.delete({
      *         id: "id"
      *     })
      */
-    public deleteLink(
-        request: ToltApi.DeleteLinkRequest,
+    public delete(
+        request: ToltApi.DeleteLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteLinkResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteLink(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.DeleteLinksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
-    private async __deleteLink(
-        request: ToltApi.DeleteLinkRequest,
+    private async __delete(
+        request: ToltApi.DeleteLinksRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteLinkResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteLinksResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -419,11 +518,13 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteLinkResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteLinksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:

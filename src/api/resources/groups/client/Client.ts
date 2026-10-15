@@ -33,16 +33,16 @@ export class GroupsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.groups.listGroups()
+     *     await client.groups.list()
      */
-    public listGroups(
+    public list(
         request: ToltApi.ListGroupsRequest = {},
         requestOptions?: GroupsClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.ListGroupsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__listGroups(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listGroups(
+    private async __list(
         request: ToltApi.ListGroupsRequest = {},
         requestOptions?: GroupsClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.ListGroupsResponse>> {
@@ -128,7 +128,7 @@ export class GroupsClient {
     }
 
     /**
-     * @param {ToltApi.GetGroupRequest} request
+     * @param {ToltApi.GetGroupsRequest} request
      * @param {GroupsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -138,21 +138,21 @@ export class GroupsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.groups.getGroup({
+     *     await client.groups.get({
      *         id: "id"
      *     })
      */
-    public getGroup(
-        request: ToltApi.GetGroupRequest,
+    public get(
+        request: ToltApi.GetGroupsRequest,
         requestOptions?: GroupsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetGroupResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getGroup(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetGroupsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getGroup(
-        request: ToltApi.GetGroupRequest,
+    private async __get(
+        request: ToltApi.GetGroupsRequest,
         requestOptions?: GroupsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetGroupResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetGroupsResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -177,7 +177,7 @@ export class GroupsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetGroupResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetGroupsResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

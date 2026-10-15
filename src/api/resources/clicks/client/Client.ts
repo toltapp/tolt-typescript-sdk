@@ -24,9 +24,9 @@ export class ClicksClient {
     }
 
     /**
-     * Records a click on a partner's link from your own server, for visits the browser script cannot see. Identify the source by link_id, by partner_id with an optional link_id, or by the link's param and value; the partner and program are resolved from it. Pass the returned id as click_id when you create the customer.
+     * Lists recorded clicks. Filter by program, partner, link, country, or device, and page with cursors.
      *
-     * @param {ToltApi.CreateClickRequest} request
+     * @param {ToltApi.ListClicksRequest} request
      * @param {ClicksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -36,21 +36,135 @@ export class ClicksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.clicks.createClick({
+     *     await client.clicks.list({
+     *         country: "Canada",
+     *         device: "desktop"
+     *     })
+     */
+    public list(
+        request: ToltApi.ListClicksRequest = {},
+        requestOptions?: ClicksClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.ListClicksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+    }
+
+    private async __list(
+        request: ToltApi.ListClicksRequest = {},
+        requestOptions?: ClicksClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.ListClicksResponse>> {
+        const {
+            limit,
+            order,
+            sort,
+            starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter,
+            created_before: createdBefore,
+            updated_after: updatedAfter,
+            updated_before: updatedBefore,
+            program_id: programId,
+            partner_id: partnerId,
+            link_id: linkId,
+            country,
+            device,
+        } = request;
+        const _queryParams: Record<string, unknown> = {
+            limit,
+            order: order != null ? order : undefined,
+            sort: sort != null ? sort : undefined,
+            starting_after: startingAfter,
+            ending_before: endingBefore,
+            created_after: createdAfter != null ? createdAfter : undefined,
+            created_before: createdBefore != null ? createdBefore : undefined,
+            updated_after: updatedAfter != null ? updatedAfter : undefined,
+            updated_before: updatedBefore != null ? updatedBefore : undefined,
+            program_id: programId,
+            partner_id: partnerId,
+            link_id: linkId,
+            country,
+            device,
+        };
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Production,
+                "v2/clicks",
+            ),
+            method: "GET",
+            headers: _headers,
+            queryString: core.url
+                .queryBuilder()
+                .addMany(_queryParams)
+                .mergeAdditional(requestOptions?.queryParams)
+                .build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.ListClicksResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 401:
+                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/clicks");
+    }
+
+    /**
+     * Records a click on a partner's link from your own server, for visits the browser script cannot see. Identify the source by link_id, by partner_id with an optional link_id, or by the link's param and value; the partner and program are resolved from it. Pass the returned id as click_id when you create the customer.
+     *
+     * @param {ToltApi.CreateClicksRequest} request
+     * @param {ClicksClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.clicks.create({
      *         "key": "value"
      *     })
      */
-    public createClick(
-        request: ToltApi.CreateClickRequest,
+    public create(
+        request: ToltApi.CreateClicksRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateClickResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__createClick(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.CreateClicksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createClick(
-        request: ToltApi.CreateClickRequest,
+    private async __create(
+        request: ToltApi.CreateClicksRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateClickResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateClicksResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -77,7 +191,7 @@ export class ClicksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateClickResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateClicksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -104,7 +218,7 @@ export class ClicksClient {
     }
 
     /**
-     * @param {ToltApi.GetClickRequest} request
+     * @param {ToltApi.GetClicksRequest} request
      * @param {ClicksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -114,21 +228,21 @@ export class ClicksClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.clicks.getClick({
+     *     await client.clicks.get({
      *         id: "id"
      *     })
      */
-    public getClick(
-        request: ToltApi.GetClickRequest,
+    public get(
+        request: ToltApi.GetClicksRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetClickResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__getClick(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.GetClicksResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
-    private async __getClick(
-        request: ToltApi.GetClickRequest,
+    private async __get(
+        request: ToltApi.GetClicksRequest,
         requestOptions?: ClicksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetClickResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetClicksResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -153,7 +267,7 @@ export class ClicksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetClickResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetClicksResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {

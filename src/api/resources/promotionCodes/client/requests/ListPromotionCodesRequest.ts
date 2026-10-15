@@ -25,6 +25,6 @@ export interface ListPromotionCodesRequest {
     updated_before?: string;
     program_id?: string;
     partner_id?: string;
-    type?: string;
+    type?: ToltApi.ListPromotionCodesRequestType;
     search?: string;
 }

@@ -1,5 +1,5 @@
-export type { CreatePromotionCodeRequest } from "./CreatePromotionCodeRequest.js";
-export type { DeletePromotionCodeRequest } from "./DeletePromotionCodeRequest.js";
-export type { GetPromotionCodeRequest } from "./GetPromotionCodeRequest.js";
+export { CreatePromotionCodesRequest } from "./CreatePromotionCodesRequest.js";
+export type { DeletePromotionCodesRequest } from "./DeletePromotionCodesRequest.js";
+export type { GetPromotionCodesRequest } from "./GetPromotionCodesRequest.js";
 export type { ListPromotionCodesRequest } from "./ListPromotionCodesRequest.js";
-export type { UpdatePromotionCodeRequest } from "./UpdatePromotionCodeRequest.js";
+export { UpdatePromotionCodesRequest } from "./UpdatePromotionCodesRequest.js";
