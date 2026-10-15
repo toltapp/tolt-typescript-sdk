@@ -18,9 +18,9 @@ const client = new ToltApiClient({
   token: process.env.TOLT_API_KEY!, // your Tolt API key
 });
 
-const transactions = await client.transactions.listTransactions();
+const transactions = await client.transactions.list();
 const overview = await client.reports.overview();
-const clicks = await client.clicks.listClicks();
+const clicks = await client.clicks.list();
 ```
 
 Sub-clients cover the whole API: `transactions`, `commissions`, `customers`, `partners`, `programs`, `links`, `promotionCodes`, `groups`, `flows`, `clicks`, `reports`. Every path, request, and response is typed from the spec.
