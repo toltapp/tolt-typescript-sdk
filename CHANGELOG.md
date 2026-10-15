@@ -1,3 +1,9 @@
+## [0.6.1](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.6.0...v0.6.1) (2026-10-15)
+
+### Bug Fixes
+
+* republish with corrected README usage examples ([95b967e](https://github.com/toltapp/tolt-typescript-sdk/commit/95b967eebe3b688dc3d2b9db491850f2269aa99c))
+
 ## [0.6.0](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.5.0...v0.6.0) (2026-10-15)
 
 ### Features
