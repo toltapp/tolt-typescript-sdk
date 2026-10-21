@@ -39,111 +39,124 @@ export class LinksClient {
      * @example
      *     await client.links.list()
      */
-    public list(
+    public async list(
         request: ToltApi.ListLinksRequest = {},
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListLinksResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: ToltApi.ListLinksRequest = {},
-        requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListLinksResponse>> {
-        const {
-            limit,
-            order,
-            sort,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter,
-            created_before: createdBefore,
-            updated_after: updatedAfter,
-            updated_before: updatedBefore,
-            program_id: programId,
-            partner_id: partnerId,
-            param,
-            value,
-            search,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            sort: sort != null ? sort : undefined,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter != null ? createdAfter : undefined,
-            created_before: createdBefore != null ? createdBefore : undefined,
-            updated_after: updatedAfter != null ? updatedAfter : undefined,
-            updated_before: updatedBefore != null ? updatedBefore : undefined,
-            program_id: programId,
-            partner_id: partnerId,
-            param,
-            value,
-            search,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
+    ): Promise<core.Page<ToltApi.Link, ToltApi.ListLinksResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (request: ToltApi.ListLinksRequest): Promise<core.WithRawResponse<ToltApi.ListLinksResponse>> => {
+                const {
+                    limit,
+                    order,
+                    sort,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter,
+                    created_before: createdBefore,
+                    updated_after: updatedAfter,
+                    updated_before: updatedBefore,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    param,
+                    value,
+                    search,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    limit,
+                    order: order != null ? order : undefined,
+                    sort: sort != null ? sort : undefined,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter != null ? createdAfter : undefined,
+                    created_before: createdBefore != null ? createdBefore : undefined,
+                    updated_after: updatedAfter != null ? updatedAfter : undefined,
+                    updated_before: updatedBefore != null ? updatedBefore : undefined,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    param,
+                    value,
+                    search,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/links",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return { data: _response.body as ToltApi.ListLinksResponse, rawResponse: _response.rawResponse };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/links");
+            },
         );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/links",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.Link, ToltApi.ListLinksResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next_cursor != null &&
+                !(typeof response?.next_cursor === "string" && response?.next_cursor === ""),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "starting_after", response?.next_cursor));
+            },
         });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.ListLinksResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/links");
     }
 
     /**
      * Creates a referral link for a partner. The value must be unique for its parameter, and param defaults to the program's.
      *
-     * @param {ToltApi.CreateLinksRequest} request
+     * @param {ToltApi.CreateLinkRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -162,16 +175,16 @@ export class LinksClient {
      *     })
      */
     public create(
-        request: ToltApi.CreateLinksRequest,
+        request: ToltApi.CreateLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.CreateLinkResponse> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: ToltApi.CreateLinksRequest,
+        request: ToltApi.CreateLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateLinksResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateLinkResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -192,31 +205,40 @@ export class LinksClient {
             requestType: "json",
             body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,
             fetchFn: this._options?.fetch,
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateLinkResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -234,7 +256,7 @@ export class LinksClient {
     /**
      * Looks up a single link by its parameter and value (value matched case-insensitively). Returns 404 when none matches.
      *
-     * @param {ToltApi.GetByParamValueLinksRequest} request
+     * @param {ToltApi.GetLinkByParamValueRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -252,16 +274,16 @@ export class LinksClient {
      *     })
      */
     public getByParamValue(
-        request: ToltApi.GetByParamValueLinksRequest,
+        request: ToltApi.GetLinkByParamValueRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetByParamValueLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetLinkByParamValueResponse> {
         return core.HttpResponsePromise.fromPromise(this.__getByParamValue(request, requestOptions));
     }
 
     private async __getByParamValue(
-        request: ToltApi.GetByParamValueLinksRequest,
+        request: ToltApi.GetLinkByParamValueRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetByParamValueLinksResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetLinkByParamValueResponse>> {
         const { param, value } = request;
         const _queryParams: Record<string, unknown> = {
             param,
@@ -294,25 +316,34 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetByParamValueLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetLinkByParamValueResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -330,7 +361,7 @@ export class LinksClient {
     /**
      * Gets an ordinary or campaign-managed link by ID.
      *
-     * @param {ToltApi.GetLinksRequest} request
+     * @param {ToltApi.GetLinkRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -346,16 +377,16 @@ export class LinksClient {
      *     })
      */
     public get(
-        request: ToltApi.GetLinksRequest,
+        request: ToltApi.GetLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetLinkResponse> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: ToltApi.GetLinksRequest,
+        request: ToltApi.GetLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetLinksResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetLinkResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -368,7 +399,7 @@ export class LinksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/links/${core.url.encodePathParam(id)}`,
+                `v2/links/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -380,23 +411,29 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetLinkResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -414,7 +451,7 @@ export class LinksClient {
     /**
      * Updates an ordinary link. Campaign-managed links must be changed through campaigns.
      *
-     * @param {ToltApi.UpdateLinksRequest} request
+     * @param {ToltApi.UpdateLinkRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -433,16 +470,16 @@ export class LinksClient {
      *     })
      */
     public update(
-        request: ToltApi.UpdateLinksRequest,
+        request: ToltApi.UpdateLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.UpdateLinkResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: ToltApi.UpdateLinksRequest,
+        request: ToltApi.UpdateLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateLinksResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateLinkResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -455,7 +492,7 @@ export class LinksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/links/${core.url.encodePathParam(id)}`,
+                `v2/links/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -470,25 +507,34 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateLinkResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -506,7 +552,7 @@ export class LinksClient {
     /**
      * Deletes an ordinary link. Campaign-managed links must be changed through campaigns.
      *
-     * @param {ToltApi.DeleteLinksRequest} request
+     * @param {ToltApi.DeleteLinkRequest} request
      * @param {LinksClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -523,16 +569,16 @@ export class LinksClient {
      *     })
      */
     public delete(
-        request: ToltApi.DeleteLinksRequest,
+        request: ToltApi.DeleteLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteLinksResponse> {
+    ): core.HttpResponsePromise<ToltApi.DeleteLinkResponse> {
         return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
-        request: ToltApi.DeleteLinksRequest,
+        request: ToltApi.DeleteLinkRequest,
         requestOptions?: LinksClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteLinksResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteLinkResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -545,7 +591,7 @@ export class LinksClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/links/${core.url.encodePathParam(id)}`,
+                `v2/links/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -557,25 +603,34 @@ export class LinksClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteLinksResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteLinkResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

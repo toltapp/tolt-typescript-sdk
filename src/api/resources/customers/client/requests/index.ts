@@ -1,5 +1,5 @@
-export { CreateCustomersRequest } from "./CreateCustomersRequest.js";
-export type { DeleteCustomersRequest } from "./DeleteCustomersRequest.js";
-export type { GetCustomersRequest } from "./GetCustomersRequest.js";
+export { CreateCustomerRequest } from "./CreateCustomerRequest.js";
+export type { DeleteCustomerRequest } from "./DeleteCustomerRequest.js";
+export type { GetCustomerRequest } from "./GetCustomerRequest.js";
 export type { ListCustomersRequest } from "./ListCustomersRequest.js";
-export { UpdateCustomersRequest } from "./UpdateCustomersRequest.js";
+export { UpdateCustomerRequest } from "./UpdateCustomerRequest.js";

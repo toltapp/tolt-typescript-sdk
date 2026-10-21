@@ -1,5 +1,5 @@
-export type { CustomerStatsReportsRequest } from "./CustomerStatsReportsRequest.js";
-export type { LinksReportsRequest } from "./LinksReportsRequest.js";
-export type { OverviewReportsRequest } from "./OverviewReportsRequest.js";
-export type { PartnersReportsRequest } from "./PartnersReportsRequest.js";
-export type { TimeseriesReportsRequest } from "./TimeseriesReportsRequest.js";
+export type { ReportsCustomersRequest } from "./ReportsCustomersRequest.js";
+export type { ReportsLinksRequest } from "./ReportsLinksRequest.js";
+export type { ReportsOverviewRequest } from "./ReportsOverviewRequest.js";
+export type { ReportsPartnersRequest } from "./ReportsPartnersRequest.js";
+export type { ReportsTimeseriesRequest } from "./ReportsTimeseriesRequest.js";

@@ -4,7 +4,7 @@ export * from "./Commission.js";
 export * from "./CreatedPartner.js";
 export * from "./Customer.js";
 export * from "./EmbedToken.js";
-export * from "./Error_.js";
+export * from "./ErrorResponse.js";
 export * from "./Flow.js";
 export * from "./Group.js";
 export * from "./Link.js";
