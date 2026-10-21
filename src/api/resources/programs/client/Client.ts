@@ -38,103 +38,118 @@ export class ProgramsClient {
      * @example
      *     await client.programs.list()
      */
-    public list(
+    public async list(
         request: ToltApi.ListProgramsRequest = {},
         requestOptions?: ProgramsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListProgramsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: ToltApi.ListProgramsRequest = {},
-        requestOptions?: ProgramsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListProgramsResponse>> {
-        const {
-            limit,
-            order,
-            sort,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter,
-            created_before: createdBefore,
-            updated_after: updatedAfter,
-            updated_before: updatedBefore,
-            search,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            sort: sort != null ? sort : undefined,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter != null ? createdAfter : undefined,
-            created_before: createdBefore != null ? createdBefore : undefined,
-            updated_after: updatedAfter != null ? updatedAfter : undefined,
-            updated_before: updatedBefore != null ? updatedBefore : undefined,
-            search,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
+    ): Promise<core.Page<ToltApi.Program, ToltApi.ListProgramsResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: ToltApi.ListProgramsRequest,
+            ): Promise<core.WithRawResponse<ToltApi.ListProgramsResponse>> => {
+                const {
+                    limit,
+                    order,
+                    sort,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter,
+                    created_before: createdBefore,
+                    updated_after: updatedAfter,
+                    updated_before: updatedBefore,
+                    search,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    limit,
+                    order: order != null ? order : undefined,
+                    sort: sort != null ? sort : undefined,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter != null ? createdAfter : undefined,
+                    created_before: createdBefore != null ? createdBefore : undefined,
+                    updated_after: updatedAfter != null ? updatedAfter : undefined,
+                    updated_before: updatedBefore != null ? updatedBefore : undefined,
+                    search,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/programs",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return { data: _response.body as ToltApi.ListProgramsResponse, rawResponse: _response.rawResponse };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/programs");
+            },
         );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/programs",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.Program, ToltApi.ListProgramsResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next_cursor != null &&
+                !(typeof response?.next_cursor === "string" && response?.next_cursor === ""),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "starting_after", response?.next_cursor));
+            },
         });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.ListProgramsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/programs");
     }
 
     /**
      * Gets a program by ID, with its name, currency, website, cookie duration and payout terms.
      *
-     * @param {ToltApi.GetProgramsRequest} request
+     * @param {ToltApi.GetProgramRequest} request
      * @param {ProgramsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -150,16 +165,16 @@ export class ProgramsClient {
      *     })
      */
     public get(
-        request: ToltApi.GetProgramsRequest,
+        request: ToltApi.GetProgramRequest,
         requestOptions?: ProgramsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetProgramsResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetProgramResponse> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: ToltApi.GetProgramsRequest,
+        request: ToltApi.GetProgramRequest,
         requestOptions?: ProgramsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetProgramsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetProgramResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -172,7 +187,7 @@ export class ProgramsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/programs/${core.url.encodePathParam(id)}`,
+                `v2/programs/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -184,23 +199,29 @@ export class ProgramsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetProgramsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetProgramResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

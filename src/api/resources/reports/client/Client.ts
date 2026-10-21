@@ -25,7 +25,7 @@ export class ReportsClient {
     /**
      * Returns revenue, commission, customer and partner totals for the organization or one program over a date range.
      *
-     * @param {ToltApi.OverviewReportsRequest} request
+     * @param {ToltApi.ReportsOverviewRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -39,16 +39,16 @@ export class ReportsClient {
      *     await client.reports.overview()
      */
     public overview(
-        request: ToltApi.OverviewReportsRequest = {},
+        request: ToltApi.ReportsOverviewRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.OverviewReportsResponse> {
+    ): core.HttpResponsePromise<ToltApi.ReportsOverviewResponse> {
         return core.HttpResponsePromise.fromPromise(this.__overview(request, requestOptions));
     }
 
     private async __overview(
-        request: ToltApi.OverviewReportsRequest = {},
+        request: ToltApi.ReportsOverviewRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.OverviewReportsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ReportsOverviewResponse>> {
         const { program_id: programId, start_date: startDate, end_date: endDate } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
@@ -82,23 +82,29 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.OverviewReportsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ReportsOverviewResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -116,7 +122,7 @@ export class ReportsClient {
     /**
      * Returns one row of revenue, commissions, customers and clicks per partner over a date range, sorted and paged by offset.
      *
-     * @param {ToltApi.PartnersReportsRequest} request
+     * @param {ToltApi.ReportsPartnersRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -129,99 +135,127 @@ export class ReportsClient {
      * @example
      *     await client.reports.partners()
      */
-    public partners(
-        request: ToltApi.PartnersReportsRequest = {},
+    public async partners(
+        request: ToltApi.ReportsPartnersRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.PartnersReportsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__partners(request, requestOptions));
-    }
-
-    private async __partners(
-        request: ToltApi.PartnersReportsRequest = {},
-        requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.PartnersReportsResponse>> {
-        const {
-            program_id: programId,
-            start_date: startDate,
-            end_date: endDate,
-            currency,
-            limit,
-            offset,
-            sort,
-            order,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            program_id: programId,
-            start_date: startDate != null ? startDate : undefined,
-            end_date: endDate != null ? endDate : undefined,
-            currency,
-            limit,
-            offset,
-            sort: sort != null ? sort : undefined,
-            order: order != null ? order : undefined,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/reports/partners",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.PartnersReportsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<ToltApi.ReportsPartnerRow, ToltApi.ReportsPartnersResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: ToltApi.ReportsPartnersRequest,
+            ): Promise<core.WithRawResponse<ToltApi.ReportsPartnersResponse>> => {
+                const {
+                    program_id: programId,
+                    start_date: startDate,
+                    end_date: endDate,
+                    currency,
+                    limit,
+                    offset,
+                    sort,
+                    order,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    program_id: programId,
+                    start_date: startDate != null ? startDate : undefined,
+                    end_date: endDate != null ? endDate : undefined,
+                    currency,
+                    limit,
+                    offset,
+                    sort: sort != null ? sort : undefined,
+                    order: order != null ? order : undefined,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/reports/partners",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as ToltApi.ReportsPartnersResponse,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/reports/partners");
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/reports/partners");
+            },
+        );
+        let _offset = request?.offset != null ? request?.offset : 0;
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.ReportsPartnerRow, ToltApi.ReportsPartnersResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.has_more ??
+                ((response?.data ?? []).length > 0 &&
+                    (request?.limit == null || (response?.data ?? []).length >= request?.limit)),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                const _nextOffset = _offset + (response?.data != null ? response.data.length : 1);
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "offset", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
+            },
+        });
     }
 
     /**
      * Returns one row of revenue, commissions, customers and clicks per link over a date range, sorted and paged by offset.
      *
-     * @param {ToltApi.LinksReportsRequest} request
+     * @param {ToltApi.ReportsLinksRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -234,99 +268,124 @@ export class ReportsClient {
      * @example
      *     await client.reports.links()
      */
-    public links(
-        request: ToltApi.LinksReportsRequest = {},
+    public async links(
+        request: ToltApi.ReportsLinksRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.LinksReportsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__links(request, requestOptions));
-    }
-
-    private async __links(
-        request: ToltApi.LinksReportsRequest = {},
-        requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.LinksReportsResponse>> {
-        const {
-            program_id: programId,
-            start_date: startDate,
-            end_date: endDate,
-            currency,
-            limit,
-            offset,
-            sort,
-            order,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            program_id: programId,
-            start_date: startDate != null ? startDate : undefined,
-            end_date: endDate != null ? endDate : undefined,
-            currency,
-            limit,
-            offset,
-            sort: sort != null ? sort : undefined,
-            order: order != null ? order : undefined,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
+    ): Promise<core.Page<ToltApi.ReportsLinkRow, ToltApi.ReportsLinksResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: ToltApi.ReportsLinksRequest,
+            ): Promise<core.WithRawResponse<ToltApi.ReportsLinksResponse>> => {
+                const {
+                    program_id: programId,
+                    start_date: startDate,
+                    end_date: endDate,
+                    currency,
+                    limit,
+                    offset,
+                    sort,
+                    order,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    program_id: programId,
+                    start_date: startDate != null ? startDate : undefined,
+                    end_date: endDate != null ? endDate : undefined,
+                    currency,
+                    limit,
+                    offset,
+                    sort: sort != null ? sort : undefined,
+                    order: order != null ? order : undefined,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/reports/links",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return { data: _response.body as ToltApi.ReportsLinksResponse, rawResponse: _response.rawResponse };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/reports/links");
+            },
         );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/reports/links",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
+        let _offset = request?.offset != null ? request?.offset : 0;
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.ReportsLinkRow, ToltApi.ReportsLinksResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.has_more ??
+                ((response?.data ?? []).length > 0 &&
+                    (request?.limit == null || (response?.data ?? []).length >= request?.limit)),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                const _nextOffset = _offset + (response?.data != null ? response.data.length : 1);
+                return core.HttpResponsePromise.fromPromise(
+                    list(core.setObjectProperty(request, "offset", _nextOffset))
+                        .withRawResponse()
+                        .then((_pageResponse) => {
+                            _offset = _nextOffset;
+                            return _pageResponse;
+                        }),
+                );
+            },
         });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.LinksReportsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/reports/links");
     }
 
     /**
      * Returns revenue, commissions, customers and clicks per day, week or month over a date range, ready to chart.
      *
-     * @param {ToltApi.TimeseriesReportsRequest} request
+     * @param {ToltApi.ReportsTimeseriesRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -340,16 +399,16 @@ export class ReportsClient {
      *     await client.reports.timeseries()
      */
     public timeseries(
-        request: ToltApi.TimeseriesReportsRequest = {},
+        request: ToltApi.ReportsTimeseriesRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.TimeseriesReportsResponse> {
+    ): core.HttpResponsePromise<ToltApi.ReportsTimeseriesResponse> {
         return core.HttpResponsePromise.fromPromise(this.__timeseries(request, requestOptions));
     }
 
     private async __timeseries(
-        request: ToltApi.TimeseriesReportsRequest = {},
+        request: ToltApi.ReportsTimeseriesRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.TimeseriesReportsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ReportsTimeseriesResponse>> {
         const { program_id: programId, start_date: startDate, end_date: endDate, granularity, currency } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
@@ -385,23 +444,29 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.TimeseriesReportsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ReportsTimeseriesResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -419,7 +484,7 @@ export class ReportsClient {
     /**
      * Returns how many customers are in each subscription status for the organization or one program.
      *
-     * @param {ToltApi.CustomerStatsReportsRequest} request
+     * @param {ToltApi.ReportsCustomersRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -430,19 +495,19 @@ export class ReportsClient {
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.reports.customerStats()
+     *     await client.reports.customers()
      */
-    public customerStats(
-        request: ToltApi.CustomerStatsReportsRequest = {},
+    public customers(
+        request: ToltApi.ReportsCustomersRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CustomerStatsReportsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__customerStats(request, requestOptions));
+    ): core.HttpResponsePromise<ToltApi.ReportsCustomersResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__customers(request, requestOptions));
     }
 
-    private async __customerStats(
-        request: ToltApi.CustomerStatsReportsRequest = {},
+    private async __customers(
+        request: ToltApi.ReportsCustomersRequest = {},
         requestOptions?: ReportsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CustomerStatsReportsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ReportsCustomersResponse>> {
         const { program_id: programId, start_date: startDate, end_date: endDate } = request;
         const _queryParams: Record<string, unknown> = {
             program_id: programId,
@@ -476,23 +541,29 @@ export class ReportsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CustomerStatsReportsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ReportsCustomersResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

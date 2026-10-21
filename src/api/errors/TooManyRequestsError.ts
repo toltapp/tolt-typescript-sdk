@@ -5,9 +5,9 @@ import * as errors from "../../errors/index.js";
 import type * as ToltApi from "../index.js";
 
 export class TooManyRequestsError extends errors.ToltApiError {
-    public declare readonly body: ToltApi.Error_;
+    public declare readonly body: ToltApi.ErrorResponse;
 
-    constructor(body: ToltApi.Error_, rawResponse?: core.RawResponse) {
+    constructor(body: ToltApi.ErrorResponse, rawResponse?: core.RawResponse) {
         super({
             message: "TooManyRequestsError",
             statusCode: 429,

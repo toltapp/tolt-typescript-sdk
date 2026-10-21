@@ -87,17 +87,23 @@ export class CommissionsClient {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -176,17 +182,23 @@ export class CommissionsClient {
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -217,115 +229,133 @@ export class CommissionsClient {
      * @example
      *     await client.commissions.list()
      */
-    public list(
+    public async list(
         request: ToltApi.ListCommissionsRequest = {},
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListCommissionsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: ToltApi.ListCommissionsRequest = {},
-        requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListCommissionsResponse>> {
-        const {
-            limit,
-            order,
-            sort,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter,
-            created_before: createdBefore,
-            updated_after: updatedAfter,
-            updated_before: updatedBefore,
-            program_id: programId,
-            partner_id: partnerId,
-            customer_id: customerId,
-            transaction_id: transactionId,
-            status,
-            type: type_,
-            search,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            sort: sort != null ? sort : undefined,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter != null ? createdAfter : undefined,
-            created_before: createdBefore != null ? createdBefore : undefined,
-            updated_after: updatedAfter != null ? updatedAfter : undefined,
-            updated_before: updatedBefore != null ? updatedBefore : undefined,
-            program_id: programId,
-            partner_id: partnerId,
-            customer_id: customerId,
-            transaction_id: transactionId,
-            status,
-            type: type_,
-            search,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/commissions",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.ListCommissionsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<ToltApi.Commission, ToltApi.ListCommissionsResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: ToltApi.ListCommissionsRequest,
+            ): Promise<core.WithRawResponse<ToltApi.ListCommissionsResponse>> => {
+                const {
+                    limit,
+                    order,
+                    sort,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter,
+                    created_before: createdBefore,
+                    updated_after: updatedAfter,
+                    updated_before: updatedBefore,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    customer_id: customerId,
+                    transaction_id: transactionId,
+                    status,
+                    type: type_,
+                    search,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    limit,
+                    order: order != null ? order : undefined,
+                    sort: sort != null ? sort : undefined,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter != null ? createdAfter : undefined,
+                    created_before: createdBefore != null ? createdBefore : undefined,
+                    updated_after: updatedAfter != null ? updatedAfter : undefined,
+                    updated_before: updatedBefore != null ? updatedBefore : undefined,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    customer_id: customerId,
+                    transaction_id: transactionId,
+                    status,
+                    type: type_,
+                    search,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/commissions",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as ToltApi.ListCommissionsResponse,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/commissions");
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/commissions");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.Commission, ToltApi.ListCommissionsResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next_cursor != null &&
+                !(typeof response?.next_cursor === "string" && response?.next_cursor === ""),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "starting_after", response?.next_cursor));
+            },
+        });
     }
 
     /**
      * Supports historical created_at values. Status defaults to approved when omitted.
      *
-     * @param {ToltApi.CreateCommissionsRequest} request
+     * @param {ToltApi.CreateCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -338,20 +368,25 @@ export class CommissionsClient {
      *
      * @example
      *     await client.commissions.create({
-     *         "key": "value"
+     *         amount: 1000,
+     *         customer_id: "cus_LBfjvtfct9pVUeLojMHiGnXv",
+     *         revenue: 5000,
+     *         status: "approved",
+     *         source: "api",
+     *         transaction_id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
      *     })
      */
     public create(
-        request: ToltApi.CreateCommissionsRequest,
+        request: ToltApi.CreateCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreateCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.CreateCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: ToltApi.CreateCommissionsRequest,
+        request: ToltApi.CreateCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreateCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreateCommissionResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -372,31 +407,40 @@ export class CommissionsClient {
             requestType: "json",
             body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,
             fetchFn: this._options?.fetch,
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreateCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreateCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -414,7 +458,7 @@ export class CommissionsClient {
     /**
      * Gets a commission by ID, with its amount, status, type and partner, plus its customer and transaction when it has them.
      *
-     * @param {ToltApi.GetCommissionsRequest} request
+     * @param {ToltApi.GetCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -430,16 +474,16 @@ export class CommissionsClient {
      *     })
      */
     public get(
-        request: ToltApi.GetCommissionsRequest,
+        request: ToltApi.GetCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: ToltApi.GetCommissionsRequest,
+        request: ToltApi.GetCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetCommissionResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -452,7 +496,7 @@ export class CommissionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/commissions/${core.url.encodePathParam(id)}`,
+                `v2/commissions/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -464,23 +508,29 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -498,7 +548,7 @@ export class CommissionsClient {
     /**
      * Unpaid commissions can be changed unless linked to a confirmed invoice or legacy autopayout invoice. Affected draft invoice totals are recalculated.
      *
-     * @param {ToltApi.UpdateCommissionsRequest} request
+     * @param {ToltApi.UpdateCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -519,16 +569,16 @@ export class CommissionsClient {
      *     })
      */
     public update(
-        request: ToltApi.UpdateCommissionsRequest,
+        request: ToltApi.UpdateCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdateCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.UpdateCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: ToltApi.UpdateCommissionsRequest,
+        request: ToltApi.UpdateCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdateCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdateCommissionResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -541,7 +591,7 @@ export class CommissionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/commissions/${core.url.encodePathParam(id)}`,
+                `v2/commissions/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -556,27 +606,39 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdateCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdateCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -594,7 +656,7 @@ export class CommissionsClient {
     /**
      * Deletes a commission. Fails for paid commissions, refund commissions, commissions on a refunded transaction, and those on a confirmed or legacy autopayout invoice.
      *
-     * @param {ToltApi.DeleteCommissionsRequest} request
+     * @param {ToltApi.DeleteCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -612,16 +674,16 @@ export class CommissionsClient {
      *     })
      */
     public delete(
-        request: ToltApi.DeleteCommissionsRequest,
+        request: ToltApi.DeleteCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeleteCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.DeleteCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
-        request: ToltApi.DeleteCommissionsRequest,
+        request: ToltApi.DeleteCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeleteCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeleteCommissionResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -634,7 +696,7 @@ export class CommissionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/commissions/${core.url.encodePathParam(id)}`,
+                `v2/commissions/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -646,27 +708,39 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeleteCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeleteCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -684,7 +758,7 @@ export class CommissionsClient {
     /**
      * Marks a commission approved so it is included in the next payout. Fails for paid commissions, refund commissions, commissions on a refunded transaction, and those on a confirmed or legacy autopayout invoice.
      *
-     * @param {ToltApi.ApproveCommissionsRequest} request
+     * @param {ToltApi.ApproveCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -702,16 +776,16 @@ export class CommissionsClient {
      *     })
      */
     public approve(
-        request: ToltApi.ApproveCommissionsRequest,
+        request: ToltApi.ApproveCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ApproveCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.ApproveCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__approve(request, requestOptions));
     }
 
     private async __approve(
-        request: ToltApi.ApproveCommissionsRequest,
+        request: ToltApi.ApproveCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ApproveCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.ApproveCommissionResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -724,7 +798,7 @@ export class CommissionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/commissions/${core.url.encodePathParam(id)}/approve`,
+                `v2/commissions/${core.url.encodePathParam(id, errors.ToltApiError)}/approve`,
             ),
             method: "POST",
             headers: _headers,
@@ -736,27 +810,39 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.ApproveCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.ApproveCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -774,7 +860,7 @@ export class CommissionsClient {
     /**
      * Marks a commission declined so it is left out of payouts until it is approved again. Fails for paid commissions, refund commissions, commissions on a refunded transaction, and those on a confirmed or legacy autopayout invoice.
      *
-     * @param {ToltApi.DeclineCommissionsRequest} request
+     * @param {ToltApi.DeclineCommissionRequest} request
      * @param {CommissionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -792,16 +878,16 @@ export class CommissionsClient {
      *     })
      */
     public decline(
-        request: ToltApi.DeclineCommissionsRequest,
+        request: ToltApi.DeclineCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeclineCommissionsResponse> {
+    ): core.HttpResponsePromise<ToltApi.DeclineCommissionResponse> {
         return core.HttpResponsePromise.fromPromise(this.__decline(request, requestOptions));
     }
 
     private async __decline(
-        request: ToltApi.DeclineCommissionsRequest,
+        request: ToltApi.DeclineCommissionRequest,
         requestOptions?: CommissionsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeclineCommissionsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeclineCommissionResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -814,7 +900,7 @@ export class CommissionsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/commissions/${core.url.encodePathParam(id)}/decline`,
+                `v2/commissions/${core.url.encodePathParam(id, errors.ToltApiError)}/decline`,
             ),
             method: "POST",
             headers: _headers,
@@ -826,27 +912,39 @@ export class CommissionsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeclineCommissionsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeclineCommissionResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

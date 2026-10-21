@@ -38,113 +38,126 @@ export class FlowsClient {
      * @example
      *     await client.flows.list()
      */
-    public list(
+    public async list(
         request: ToltApi.ListFlowsRequest = {},
         requestOptions?: FlowsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListFlowsResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: ToltApi.ListFlowsRequest = {},
-        requestOptions?: FlowsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListFlowsResponse>> {
-        const {
-            limit,
-            order,
-            sort,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter,
-            created_before: createdBefore,
-            updated_after: updatedAfter,
-            updated_before: updatedBefore,
-            program_id: programId,
-            group_id: groupId,
-            campaign_id: campaignId,
-            event,
-            active,
-            search,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            sort: sort != null ? sort : undefined,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter != null ? createdAfter : undefined,
-            created_before: createdBefore != null ? createdBefore : undefined,
-            updated_after: updatedAfter != null ? updatedAfter : undefined,
-            updated_before: updatedBefore != null ? updatedBefore : undefined,
-            program_id: programId,
-            group_id: groupId,
-            campaign_id: campaignId,
-            event,
-            active: active != null ? active : undefined,
-            search,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
+    ): Promise<core.Page<ToltApi.Flow, ToltApi.ListFlowsResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (request: ToltApi.ListFlowsRequest): Promise<core.WithRawResponse<ToltApi.ListFlowsResponse>> => {
+                const {
+                    limit,
+                    order,
+                    sort,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter,
+                    created_before: createdBefore,
+                    updated_after: updatedAfter,
+                    updated_before: updatedBefore,
+                    program_id: programId,
+                    group_id: groupId,
+                    campaign_id: campaignId,
+                    event,
+                    active,
+                    search,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    limit,
+                    order: order != null ? order : undefined,
+                    sort: sort != null ? sort : undefined,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter != null ? createdAfter : undefined,
+                    created_before: createdBefore != null ? createdBefore : undefined,
+                    updated_after: updatedAfter != null ? updatedAfter : undefined,
+                    updated_before: updatedBefore != null ? updatedBefore : undefined,
+                    program_id: programId,
+                    group_id: groupId,
+                    campaign_id: campaignId,
+                    event,
+                    active,
+                    search,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/flows",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return { data: _response.body as ToltApi.ListFlowsResponse, rawResponse: _response.rawResponse };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/flows");
+            },
         );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/flows",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.Flow, ToltApi.ListFlowsResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next_cursor != null &&
+                !(typeof response?.next_cursor === "string" && response?.next_cursor === ""),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "starting_after", response?.next_cursor));
+            },
         });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.ListFlowsResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/flows");
     }
 
     /**
      * Gets a flow by ID, with the event it runs on, its conditions and its action: a commission to generate or a group to move the partner to.
      *
-     * @param {ToltApi.GetFlowsRequest} request
+     * @param {ToltApi.GetFlowRequest} request
      * @param {FlowsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -160,16 +173,16 @@ export class FlowsClient {
      *     })
      */
     public get(
-        request: ToltApi.GetFlowsRequest,
+        request: ToltApi.GetFlowRequest,
         requestOptions?: FlowsClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetFlowsResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetFlowResponse> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: ToltApi.GetFlowsRequest,
+        request: ToltApi.GetFlowRequest,
         requestOptions?: FlowsClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetFlowsResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetFlowResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -182,7 +195,7 @@ export class FlowsClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/flows/${core.url.encodePathParam(id)}`,
+                `v2/flows/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -194,23 +207,29 @@ export class FlowsClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetFlowsResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetFlowResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

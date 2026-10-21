@@ -34,7 +34,7 @@ export interface ListFlowsRequest {
     /** Only flows triggered by this event, such as transaction_created or lead_created. */
     event?: string;
     /** true lists only active flows, false only paused flows, which do not run. */
-    active?: ToltApi.ListFlowsRequestActive;
+    active?: boolean;
     /** Text matched anywhere in the flow's name or description, ignoring case. */
     search?: string;
 }

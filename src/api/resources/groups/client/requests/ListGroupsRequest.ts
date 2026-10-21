@@ -30,5 +30,5 @@ export interface ListGroupsRequest {
     /** Text matched anywhere in the group's name, description or public key, ignoring case. */
     search?: string;
     /** true lists only default groups, where new partners are placed unless another group is chosen; false lists the others. */
-    default?: ToltApi.ListGroupsRequestDefault;
+    default?: boolean;
 }

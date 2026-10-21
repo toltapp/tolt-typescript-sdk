@@ -39,109 +39,127 @@ export class PromotionCodesClient {
      * @example
      *     await client.promotionCodes.list()
      */
-    public list(
+    public async list(
         request: ToltApi.ListPromotionCodesRequest = {},
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.ListPromotionCodesResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
-    }
-
-    private async __list(
-        request: ToltApi.ListPromotionCodesRequest = {},
-        requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.ListPromotionCodesResponse>> {
-        const {
-            limit,
-            order,
-            sort,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter,
-            created_before: createdBefore,
-            updated_after: updatedAfter,
-            updated_before: updatedBefore,
-            program_id: programId,
-            partner_id: partnerId,
-            type: type_,
-            search,
-        } = request;
-        const _queryParams: Record<string, unknown> = {
-            limit,
-            order: order != null ? order : undefined,
-            sort: sort != null ? sort : undefined,
-            starting_after: startingAfter,
-            ending_before: endingBefore,
-            created_after: createdAfter != null ? createdAfter : undefined,
-            created_before: createdBefore != null ? createdBefore : undefined,
-            updated_after: updatedAfter != null ? updatedAfter : undefined,
-            updated_before: updatedBefore != null ? updatedBefore : undefined,
-            program_id: programId,
-            partner_id: partnerId,
-            type: type_ != null ? type_ : undefined,
-            search,
-        };
-        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
-        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            _authRequest.headers,
-            this._options?.headers,
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Default,
-                "v2/promotion-codes",
-            ),
-            method: "GET",
-            headers: _headers,
-            queryString: core.url
-                .queryBuilder()
-                .addMany(_queryParams)
-                .mergeAdditional(requestOptions?.queryParams)
-                .build(),
-            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-            fetchFn: this._options?.fetch,
-            logging: this._options.logging,
-        });
-        if (_response.ok) {
-            return { data: _response.body as ToltApi.ListPromotionCodesResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 413:
-                    throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                case 429:
-                    throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.ToltApiError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
+    ): Promise<core.Page<ToltApi.PromotionCode, ToltApi.ListPromotionCodesResponse>> {
+        const list = core.HttpResponsePromise.interceptFunction(
+            async (
+                request: ToltApi.ListPromotionCodesRequest,
+            ): Promise<core.WithRawResponse<ToltApi.ListPromotionCodesResponse>> => {
+                const {
+                    limit,
+                    order,
+                    sort,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter,
+                    created_before: createdBefore,
+                    updated_after: updatedAfter,
+                    updated_before: updatedBefore,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    type: type_,
+                    search,
+                } = request;
+                const _queryParams: Record<string, unknown> = {
+                    limit,
+                    order: order != null ? order : undefined,
+                    sort: sort != null ? sort : undefined,
+                    starting_after: startingAfter,
+                    ending_before: endingBefore,
+                    created_after: createdAfter != null ? createdAfter : undefined,
+                    created_before: createdBefore != null ? createdBefore : undefined,
+                    updated_after: updatedAfter != null ? updatedAfter : undefined,
+                    updated_before: updatedBefore != null ? updatedBefore : undefined,
+                    program_id: programId,
+                    partner_id: partnerId,
+                    type: type_ != null ? type_ : undefined,
+                    search,
+                };
+                const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+                const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+                    _authRequest.headers,
+                    this._options?.headers,
+                    requestOptions?.headers,
+                );
+                const _response = await core.fetcher({
+                    url: core.url.join(
+                        (await core.Supplier.get(this._options.baseUrl)) ??
+                            (await core.Supplier.get(this._options.environment)) ??
+                            environments.ToltApiEnvironment.Default,
+                        "v2/promotion-codes",
+                    ),
+                    method: "GET",
+                    headers: _headers,
+                    queryString: core.url
+                        .queryBuilder()
+                        .addMany(_queryParams)
+                        .mergeAdditional(requestOptions?.queryParams)
+                        .build(),
+                    timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+                    maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+                    abortSignal: requestOptions?.abortSignal,
+                    fetchFn: this._options?.fetch,
+                    logging: this._options.logging,
+                });
+                if (_response.ok) {
+                    return {
+                        data: _response.body as ToltApi.ListPromotionCodesResponse,
                         rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/promotion-codes");
+                    };
+                }
+                if (_response.error.reason === "status-code") {
+                    switch (_response.error.statusCode) {
+                        case 400:
+                            throw new ToltApi.BadRequestError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 401:
+                            throw new ToltApi.UnauthorizedError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 413:
+                            throw new ToltApi.ContentTooLargeError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        case 429:
+                            throw new ToltApi.TooManyRequestsError(
+                                _response.error.body as ToltApi.ErrorResponse,
+                                _response.rawResponse,
+                            );
+                        default:
+                            throw new errors.ToltApiError({
+                                statusCode: _response.error.statusCode,
+                                body: _response.error.body,
+                                rawResponse: _response.rawResponse,
+                            });
+                    }
+                }
+                return handleNonStatusCodeError(_response.error, _response.rawResponse, "GET", "/v2/promotion-codes");
+            },
+        );
+        const dataWithRawResponse = await list(request).withRawResponse();
+        return new core.Page<ToltApi.PromotionCode, ToltApi.ListPromotionCodesResponse>({
+            response: dataWithRawResponse.data,
+            rawResponse: dataWithRawResponse.rawResponse,
+            hasNextPage: (response) =>
+                response?.next_cursor != null &&
+                !(typeof response?.next_cursor === "string" && response?.next_cursor === ""),
+            getItems: (response) => response?.data ?? [],
+            loadPage: (response) => {
+                return list(core.setObjectProperty(request, "starting_after", response?.next_cursor));
+            },
+        });
     }
 
     /**
      * Creates a promotion code for a partner, so customers who use it are credited to them. A partner cannot have the same code twice.
      *
-     * @param {ToltApi.CreatePromotionCodesRequest} request
+     * @param {ToltApi.CreatePromotionCodeRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -161,16 +179,16 @@ export class PromotionCodesClient {
      *     })
      */
     public create(
-        request: ToltApi.CreatePromotionCodesRequest,
+        request: ToltApi.CreatePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.CreatePromotionCodesResponse> {
+    ): core.HttpResponsePromise<ToltApi.CreatePromotionCodeResponse> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: ToltApi.CreatePromotionCodesRequest,
+        request: ToltApi.CreatePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.CreatePromotionCodesResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.CreatePromotionCodeResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             _authRequest.headers,
@@ -191,31 +209,40 @@ export class PromotionCodesClient {
             requestType: "json",
             body: mergeAdditionalBodyParameters(request, requestOptions?.additionalBodyParameters),
             timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
-            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            maxRetries: 0,
             abortSignal: requestOptions?.abortSignal,
             fetchFn: this._options?.fetch,
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.CreatePromotionCodesResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.CreatePromotionCodeResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -233,7 +260,7 @@ export class PromotionCodesClient {
     /**
      * Gets a promotion code by ID, with its discount type and value and the partner, group or program it belongs to.
      *
-     * @param {ToltApi.GetPromotionCodesRequest} request
+     * @param {ToltApi.GetPromotionCodeRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -249,16 +276,16 @@ export class PromotionCodesClient {
      *     })
      */
     public get(
-        request: ToltApi.GetPromotionCodesRequest,
+        request: ToltApi.GetPromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.GetPromotionCodesResponse> {
+    ): core.HttpResponsePromise<ToltApi.GetPromotionCodeResponse> {
         return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        request: ToltApi.GetPromotionCodesRequest,
+        request: ToltApi.GetPromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.GetPromotionCodesResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.GetPromotionCodeResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -271,7 +298,7 @@ export class PromotionCodesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/promotion-codes/${core.url.encodePathParam(id)}`,
+                `v2/promotion-codes/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -283,23 +310,29 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.GetPromotionCodesResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.GetPromotionCodeResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -317,7 +350,7 @@ export class PromotionCodesClient {
     /**
      * Updates a promotion code's code, discount type or value.
      *
-     * @param {ToltApi.UpdatePromotionCodesRequest} request
+     * @param {ToltApi.UpdatePromotionCodeRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
@@ -338,16 +371,16 @@ export class PromotionCodesClient {
      *     })
      */
     public update(
-        request: ToltApi.UpdatePromotionCodesRequest,
+        request: ToltApi.UpdatePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.UpdatePromotionCodesResponse> {
+    ): core.HttpResponsePromise<ToltApi.UpdatePromotionCodeResponse> {
         return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
     }
 
     private async __update(
-        request: ToltApi.UpdatePromotionCodesRequest,
+        request: ToltApi.UpdatePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.UpdatePromotionCodesResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.UpdatePromotionCodeResponse>> {
         const { id, ..._body } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -360,7 +393,7 @@ export class PromotionCodesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/promotion-codes/${core.url.encodePathParam(id)}`,
+                `v2/promotion-codes/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "PUT",
             headers: _headers,
@@ -375,27 +408,39 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.UpdatePromotionCodesResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.UpdatePromotionCodeResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 400:
-                    throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.ConflictError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -413,7 +458,7 @@ export class PromotionCodesClient {
     /**
      * Deletes a promotion code, so customers who use it afterwards are no longer attributed through it.
      *
-     * @param {ToltApi.DeletePromotionCodesRequest} request
+     * @param {ToltApi.DeletePromotionCodeRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
@@ -429,16 +474,16 @@ export class PromotionCodesClient {
      *     })
      */
     public delete(
-        request: ToltApi.DeletePromotionCodesRequest,
+        request: ToltApi.DeletePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): core.HttpResponsePromise<ToltApi.DeletePromotionCodesResponse> {
+    ): core.HttpResponsePromise<ToltApi.DeletePromotionCodeResponse> {
         return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
-        request: ToltApi.DeletePromotionCodesRequest,
+        request: ToltApi.DeletePromotionCodeRequest,
         requestOptions?: PromotionCodesClient.RequestOptions,
-    ): Promise<core.WithRawResponse<ToltApi.DeletePromotionCodesResponse>> {
+    ): Promise<core.WithRawResponse<ToltApi.DeletePromotionCodeResponse>> {
         const { id } = request;
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
         const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -451,7 +496,7 @@ export class PromotionCodesClient {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.ToltApiEnvironment.Default,
-                `v2/promotion-codes/${core.url.encodePathParam(id)}`,
+                `v2/promotion-codes/${core.url.encodePathParam(id, errors.ToltApiError)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -463,23 +508,29 @@ export class PromotionCodesClient {
             logging: this._options.logging,
         });
         if (_response.ok) {
-            return { data: _response.body as ToltApi.DeletePromotionCodesResponse, rawResponse: _response.rawResponse };
+            return { data: _response.body as ToltApi.DeletePromotionCodeResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 401:
-                    throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 404:
-                    throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 413:
                     throw new ToltApi.ContentTooLargeError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
-                        _response.error.body as ToltApi.Error_,
+                        _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
                 default:

@@ -1,2 +1,2 @@
-export type { GetFlowsRequest } from "./GetFlowsRequest.js";
+export type { GetFlowRequest } from "./GetFlowRequest.js";
 export type { ListFlowsRequest } from "./ListFlowsRequest.js";
