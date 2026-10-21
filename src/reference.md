@@ -12,7 +12,7 @@
 <dl>
 <dd>
 
-Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser.
+Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser. With partner (email and program_id), the partner is created when the program has none with that email, so one call covers a user's first visit.
 </dd>
 </dl>
 </dd>

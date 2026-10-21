@@ -3,4 +3,6 @@
 export interface EmbedToken {
     token: string;
     expires_at: string;
+    /** The partner the token is for, including one this call just created. */
+    partner_id: string;
 }
