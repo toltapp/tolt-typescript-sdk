@@ -20,7 +20,7 @@ export interface Commission {
     is_ad_click: boolean | null;
     is_self_referral: boolean | null;
     approval_type: string | null;
-    scheduled_approval_date: string;
+    scheduled_approval_date: string | null;
     created_at: string;
     updated_at: string;
 }

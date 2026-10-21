@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
  *     }
  */
 export interface ApprovePartnersRequest {

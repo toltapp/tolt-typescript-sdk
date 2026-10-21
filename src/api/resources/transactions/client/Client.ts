@@ -24,11 +24,14 @@ export class TransactionsClient {
     }
 
     /**
+     * Lists transactions. Filter by program, partner, customer or status, and page with cursors.
+     *
      * @param {ToltApi.ListTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -89,7 +92,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/transactions",
             ),
             method: "GET",
@@ -115,6 +118,11 @@ export class TransactionsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -140,14 +148,21 @@ export class TransactionsClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.create({
-     *         amount: 1,
-     *         customer_id: "customer_id"
+     *         product_id: "prod_pro",
+     *         product_name: "Pro plan",
+     *         amount: 5000,
+     *         customer_id: "cus_LBfjvtfct9pVUeLojMHiGnXv",
+     *         billing_type: "subscription",
+     *         interval: "month",
+     *         source: "api"
      *     })
      */
     public create(
@@ -171,7 +186,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/transactions",
             ),
             method: "POST",
@@ -196,6 +211,13 @@ export class TransactionsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -214,18 +236,21 @@ export class TransactionsClient {
     }
 
     /**
+     * Gets a transaction by ID, with its amount, status, billing details, products and the customer it belongs to.
+     *
      * @param {ToltApi.GetTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.get({
-     *         id: "id"
+     *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
      *     })
      */
     public get(
@@ -250,7 +275,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/transactions/${core.url.encodePathParam(id)}`,
             ),
             method: "GET",
@@ -272,6 +297,11 @@ export class TransactionsClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -290,6 +320,8 @@ export class TransactionsClient {
     }
 
     /**
+     * Updates a transaction's amount, status, billing or product details. Refunded transactions cannot be modified.
+     *
      * @param {ToltApi.UpdateTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -297,13 +329,16 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.update({
-     *         id: "id"
+     *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA",
+     *         amount: 5000,
+     *         product_name: "Pro plan"
      *     })
      */
     public update(
@@ -328,7 +363,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/transactions/${core.url.encodePathParam(id)}`,
             ),
             method: "PUT",
@@ -357,6 +392,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -375,19 +415,22 @@ export class TransactionsClient {
     }
 
     /**
+     * Deletes a transaction. Refunded transactions and transactions that already have commissions cannot be deleted.
+     *
      * @param {ToltApi.DeleteTransactionsRequest} request
      * @param {TransactionsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.delete({
-     *         id: "id"
+     *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
      *     })
      */
     public delete(
@@ -412,7 +455,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/transactions/${core.url.encodePathParam(id)}`,
             ),
             method: "DELETE",
@@ -436,6 +479,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -462,13 +510,14 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.refund({
-     *         id: "id"
+     *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
      *     })
      */
     public refund(
@@ -493,7 +542,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/transactions/${core.url.encodePathParam(id)}/refund`,
             ),
             method: "POST",
@@ -517,6 +566,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -543,13 +597,14 @@ export class TransactionsClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.transactions.rerunFlows({
-     *         id: "id"
+     *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
      *     })
      */
     public rerunFlows(
@@ -574,7 +629,7 @@ export class TransactionsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/transactions/${core.url.encodePathParam(id)}/rerun-flows`,
             ),
             method: "POST",
@@ -601,6 +656,11 @@ export class TransactionsClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

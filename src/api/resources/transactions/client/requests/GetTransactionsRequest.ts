@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "txn_fB3egT1sKNVNu3ZYuU1ypYDA"
  *     }
  */
 export interface GetTransactionsRequest {

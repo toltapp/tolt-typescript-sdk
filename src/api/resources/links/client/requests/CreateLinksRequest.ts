@@ -3,12 +3,16 @@
 /**
  * @example
  *     {
- *         value: "value",
- *         partner_id: "partner_id"
+ *         value: "sam",
+ *         param: "ref",
+ *         partner_id: "part_NLYzgNKuSuASvrvoxNtau6SY"
  *     }
  */
 export interface CreateLinksRequest {
+    /** Slug that identifies the partner in referral URLs, such as `sam` in `?ref=sam`, saved in lowercase. Pick one that no other link uses with the same parameter; a taken slug returns an error. */
     value: string;
+    /** Query parameter of the link, e.g. `ref` in `?ref=sam`. Leave it out or send an empty string to use the program's first link parameter, which is what gets stored. */
     param?: string;
+    /** Id of the partner who owns the link (part_...), as returned when listing partners. The link is created in that partner's program. */
     partner_id: string;
 }

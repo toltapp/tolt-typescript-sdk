@@ -31,13 +31,14 @@ export class PartnersClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.bulkApprove({
-     *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+     *         ids: ["part_NLYzgNKuSuASvrvoxNtau6SY", "part_9fQ2xLLmN3kP8dRvT1wYbHcS"]
      *     })
      */
     public bulkApprove(
@@ -61,7 +62,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/partners/bulk/approve",
             ),
             method: "POST",
@@ -86,6 +87,11 @@ export class PartnersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -111,13 +117,15 @@ export class PartnersClient {
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.bulkReject({
-     *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+     *         ids: ["part_NLYzgNKuSuASvrvoxNtau6SY", "part_9fQ2xLLmN3kP8dRvT1wYbHcS"],
+     *         rejection_note: "Site does not match our audience."
      *     })
      */
     public bulkReject(
@@ -141,7 +149,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/partners/bulk/reject",
             ),
             method: "POST",
@@ -166,6 +174,11 @@ export class PartnersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -184,11 +197,14 @@ export class PartnersClient {
     }
 
     /**
+     * Lists onboarded partners. Filter by status, program or group, search by name, email or company, and page with cursors.
+     *
      * @param {ToltApi.ListPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -247,7 +263,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/partners",
             ),
             method: "GET",
@@ -273,6 +289,11 @@ export class PartnersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -299,14 +320,22 @@ export class PartnersClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.create({
-     *         email: "sam@acme.com",
-     *         program_id: "prg_YRsbPDAK"
+     *         email: "sam@example.com",
+     *         program_id: "prg_T6z8aRW3XCmvFWP972RKxpAd",
+     *         first_name: "Sam",
+     *         last_name: "Taylor",
+     *         group_id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a",
+     *         link: {
+     *             value: "sam",
+     *             param: "ref"
+     *         }
      *     })
      */
     public create(
@@ -330,7 +359,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/partners",
             ),
             method: "POST",
@@ -357,6 +386,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -375,18 +409,21 @@ export class PartnersClient {
     }
 
     /**
+     * Gets a partner by ID, with their profile, status, group and program.
+     *
      * @param {ToltApi.GetPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.get({
-     *         id: "id"
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
      *     })
      */
     public get(
@@ -411,7 +448,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/partners/${core.url.encodePathParam(id)}`,
             ),
             method: "GET",
@@ -433,6 +470,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -459,14 +501,17 @@ export class PartnersClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
-     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.update({
-     *         id: "id"
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY",
+     *         first_name: "Sam",
+     *         last_name: "Taylor",
+     *         group_id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a"
      *     })
      */
     public update(
@@ -491,7 +536,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/partners/${core.url.encodePathParam(id)}`,
             ),
             method: "PUT",
@@ -518,8 +563,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
-                case 409:
-                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -538,18 +586,21 @@ export class PartnersClient {
     }
 
     /**
+     * Makes the partner active. A partner who was not already active is sent the program's approval email.
+     *
      * @param {ToltApi.ApprovePartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.approve({
-     *         id: "id"
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
      *     })
      */
     public approve(
@@ -574,7 +625,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/partners/${core.url.encodePathParam(id)}/approve`,
             ),
             method: "POST",
@@ -596,6 +647,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -614,19 +670,22 @@ export class PartnersClient {
     }
 
     /**
+     * Rejects the partner. A partner who was not already rejected is sent the program's rejection email with the note.
+     *
      * @param {ToltApi.RejectPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.reject({
-     *         id: "id"
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
      *     })
      */
     public reject(
@@ -651,7 +710,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/partners/${core.url.encodePathParam(id)}/reject`,
             ),
             method: "POST",
@@ -678,6 +737,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -696,19 +760,22 @@ export class PartnersClient {
     }
 
     /**
+     * Suspends the partner, with an optional suspension_reason. Use the approve action to make them active again.
+     *
      * @param {ToltApi.SuspendPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.partners.suspend({
-     *         id: "id"
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
      *     })
      */
     public suspend(
@@ -733,7 +800,7 @@ export class PartnersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/partners/${core.url.encodePathParam(id)}/suspend`,
             ),
             method: "POST",
@@ -760,6 +827,11 @@ export class PartnersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

@@ -14,8 +14,8 @@ export interface Customer {
     link_id: string | null;
     promotion_code_id: string | null;
     click_id: string | null;
-    lead_at: string;
-    active_at: string;
+    lead_at: string | null;
+    active_at: string | null;
     created_at: string;
     updated_at: string;
 }

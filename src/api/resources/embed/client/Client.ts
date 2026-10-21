@@ -32,22 +32,25 @@ export class EmbedClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.embed.createToken()
+     *     await client.embed.createToken({
+     *         "key": "value"
+     *     })
      */
     public createToken(
-        request: ToltApi.CreateTokenEmbedRequest = {},
+        request: ToltApi.CreateTokenEmbedRequest,
         requestOptions?: EmbedClient.RequestOptions,
     ): core.HttpResponsePromise<ToltApi.CreateTokenEmbedResponse> {
         return core.HttpResponsePromise.fromPromise(this.__createToken(request, requestOptions));
     }
 
     private async __createToken(
-        request: ToltApi.CreateTokenEmbedRequest = {},
+        request: ToltApi.CreateTokenEmbedRequest,
         requestOptions?: EmbedClient.RequestOptions,
     ): Promise<core.WithRawResponse<ToltApi.CreateTokenEmbedResponse>> {
         const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -60,7 +63,7 @@ export class EmbedClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/embed-tokens",
             ),
             method: "POST",
@@ -87,6 +90,11 @@ export class EmbedClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

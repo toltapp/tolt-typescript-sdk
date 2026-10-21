@@ -28,6 +28,7 @@ export namespace Error_ {
         TransactionRefunded: "transaction_refunded",
         CommissionExists: "commission_exists",
         RateLimited: "rate_limited",
+        PayloadTooLarge: "payload_too_large",
         InternalError: "internal_error",
     } as const;
     export type Code = (typeof Code)[keyof typeof Code];

@@ -3,18 +3,25 @@
 /**
  * @example
  *     {
- *         code: "code",
- *         partner_id: "partner_id"
+ *         code: "SAM20",
+ *         type: "percentage",
+ *         value: "20",
+ *         partner_id: "part_NLYzgNKuSuASvrvoxNtau6SY"
  *     }
  */
 export interface CreatePromotionCodesRequest {
+    /** The discount code as customers enter it at checkout. Customers and payments that use it are attributed to the code's partner. A partner cannot have the same code twice, ignoring case. Recording it here does not create it in your billing system. */
     code: string;
+    /** Whether value is a percent off or a fixed amount off. */
     type?: CreatePromotionCodesRequest.Type;
+    /** Size of the discount as a plain decimal: a percent from 0 to 100 for percentage codes ("20" is 20%), or an amount from 0 to 1,000,000 in major units of the program currency for fixed codes ("20" is 20.00). */
     value?: string;
+    /** Id of the partner the code belongs to (part_...), as returned when listing partners. The code is created in that partner's program. */
     partner_id: string;
 }
 
 export namespace CreatePromotionCodesRequest {
+    /** Whether value is a percent off or a fixed amount off. */
     export const Type = {
         Fixed: "fixed",
         Percentage: "percentage",

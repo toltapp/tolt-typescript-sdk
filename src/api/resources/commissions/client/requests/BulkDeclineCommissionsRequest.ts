@@ -3,10 +3,10 @@
 /**
  * @example
  *     {
- *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+ *         ids: ["comm_X85RLnefjTCNrypH4MA1PdSp", "comm_3RtV9kQ2mW8nX5pL1sB7cD4f"]
  *     }
  */
 export interface BulkDeclineCommissionsRequest {
-    /** Up to 100 ids. Duplicates are processed once. */
+    /** Ids of the commissions to act on, as returned when listing commissions. Each one succeeds or fails on its own and gets its own entry in results. */
     ids: string[];
 }

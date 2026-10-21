@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "flw_fAyK6FQ6EZngabgw8JifzQgN"
  *     }
  */
 export interface GetFlowsRequest {

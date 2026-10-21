@@ -24,11 +24,14 @@ export class PromotionCodesClient {
     }
 
     /**
+     * Lists promotion codes. Filter by program, partner or type, and page with cursors.
+     *
      * @param {ToltApi.ListPromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -87,7 +90,7 @@ export class PromotionCodesClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/promotion-codes",
             ),
             method: "GET",
@@ -113,6 +116,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -131,19 +139,25 @@ export class PromotionCodesClient {
     }
 
     /**
+     * Creates a promotion code for a partner, so customers who use it are credited to them. A partner cannot have the same code twice.
+     *
      * @param {ToltApi.CreatePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.promotionCodes.create({
-     *         code: "code",
-     *         partner_id: "partner_id"
+     *         code: "SAM20",
+     *         type: "percentage",
+     *         value: "20",
+     *         partner_id: "part_NLYzgNKuSuASvrvoxNtau6SY"
      *     })
      */
     public create(
@@ -167,7 +181,7 @@ export class PromotionCodesClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/promotion-codes",
             ),
             method: "POST",
@@ -192,6 +206,13 @@ export class PromotionCodesClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -210,18 +231,21 @@ export class PromotionCodesClient {
     }
 
     /**
+     * Gets a promotion code by ID, with its discount type and value and the partner, group or program it belongs to.
+     *
      * @param {ToltApi.GetPromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.promotionCodes.get({
-     *         id: "id"
+     *         id: "promo_gTCAUsWfdmN2GuCVRaHWNRan"
      *     })
      */
     public get(
@@ -246,7 +270,7 @@ export class PromotionCodesClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/promotion-codes/${core.url.encodePathParam(id)}`,
             ),
             method: "GET",
@@ -268,6 +292,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -286,19 +315,26 @@ export class PromotionCodesClient {
     }
 
     /**
+     * Updates a promotion code's code, discount type or value.
+     *
      * @param {ToltApi.UpdatePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.promotionCodes.update({
-     *         id: "id"
+     *         id: "promo_gTCAUsWfdmN2GuCVRaHWNRan",
+     *         code: "SAM20",
+     *         type: "percentage",
+     *         value: "20"
      *     })
      */
     public update(
@@ -323,7 +359,7 @@ export class PromotionCodesClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/promotion-codes/${core.url.encodePathParam(id)}`,
             ),
             method: "PUT",
@@ -350,6 +386,13 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 409:
+                    throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -368,18 +411,21 @@ export class PromotionCodesClient {
     }
 
     /**
+     * Deletes a promotion code, so customers who use it afterwards are no longer attributed through it.
+     *
      * @param {ToltApi.DeletePromotionCodesRequest} request
      * @param {PromotionCodesClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.promotionCodes.delete({
-     *         id: "id"
+     *         id: "promo_gTCAUsWfdmN2GuCVRaHWNRan"
      *     })
      */
     public delete(
@@ -404,7 +450,7 @@ export class PromotionCodesClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/promotion-codes/${core.url.encodePathParam(id)}`,
             ),
             method: "DELETE",
@@ -426,6 +472,11 @@ export class PromotionCodesClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

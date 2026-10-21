@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "comm_X85RLnefjTCNrypH4MA1PdSp"
  *     }
  */
 export interface ApproveCommissionsRequest {

@@ -7,12 +7,20 @@ import type * as ToltApi from "../../../../index.js";
  *     {}
  */
 export interface PartnersReportsRequest {
+    /** Limit to one program, by its id (prg_...) as returned when listing programs. */
     program_id?: string;
+    /** Earliest day to include, by creation date (customers by the day they became active). Leave it out for no lower bound. */
     start_date?: string;
+    /** Latest day to include, by creation date (customers by the day they became active); the whole day counts. Leave it out for no upper bound. */
     end_date?: string;
+    /** Only include transactions and commissions in this currency, such as USD; matching ignores case. Rows without their own currency use their program's. */
     currency?: string;
+    /** How many rows to return in one page. */
     limit?: number;
+    /** How many rows to skip before this page begins. */
     offset?: number | null;
+    /** Metric to rank by, computed over the date window. */
     sort?: ToltApi.PartnersReportsRequestSort;
+    /** Ranking direction: desc puts the highest values first. */
     order?: ToltApi.PartnersReportsRequestOrder;
 }
