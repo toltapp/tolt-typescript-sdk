@@ -3,10 +3,11 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
  *     }
  */
 export interface RejectPartnersRequest {
     id: string;
+    /** Reason for the rejection, shown to the partner in the partner portal. Null clears an earlier note. */
     rejection_note?: string | null;
 }

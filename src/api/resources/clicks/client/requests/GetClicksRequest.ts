@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "clk_mEsbFYv6ZjqXjAoFwokjS6v6"
  *     }
  */
 export interface GetClicksRequest {

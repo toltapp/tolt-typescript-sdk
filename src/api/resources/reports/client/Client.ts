@@ -23,11 +23,14 @@ export class ReportsClient {
     }
 
     /**
+     * Returns revenue, commission, customer and partner totals for the organization or one program over a date range.
+     *
      * @param {ToltApi.OverviewReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -62,7 +65,7 @@ export class ReportsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/reports/overview",
             ),
             method: "GET",
@@ -88,6 +91,11 @@ export class ReportsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -106,11 +114,14 @@ export class ReportsClient {
     }
 
     /**
+     * Returns one row of revenue, commissions, customers and clicks per partner over a date range, sorted and paged by offset.
+     *
      * @param {ToltApi.PartnersReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -159,7 +170,7 @@ export class ReportsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/reports/partners",
             ),
             method: "GET",
@@ -185,6 +196,11 @@ export class ReportsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -203,11 +219,14 @@ export class ReportsClient {
     }
 
     /**
+     * Returns one row of revenue, commissions, customers and clicks per link over a date range, sorted and paged by offset.
+     *
      * @param {ToltApi.LinksReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -256,7 +275,7 @@ export class ReportsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/reports/links",
             ),
             method: "GET",
@@ -282,6 +301,11 @@ export class ReportsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -300,11 +324,14 @@ export class ReportsClient {
     }
 
     /**
+     * Returns revenue, commissions, customers and clicks per day, week or month over a date range, ready to chart.
+     *
      * @param {ToltApi.TimeseriesReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -341,7 +368,7 @@ export class ReportsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/reports/timeseries",
             ),
             method: "GET",
@@ -367,6 +394,11 @@ export class ReportsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -385,11 +417,14 @@ export class ReportsClient {
     }
 
     /**
+     * Returns how many customers are in each subscription status for the organization or one program.
+     *
      * @param {ToltApi.CustomerStatsReportsRequest} request
      * @param {ReportsClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -424,7 +459,7 @@ export class ReportsClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/reports/customers",
             ),
             method: "GET",
@@ -450,6 +485,11 @@ export class ReportsClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

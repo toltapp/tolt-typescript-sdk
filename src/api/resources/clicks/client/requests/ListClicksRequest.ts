@@ -10,24 +10,29 @@ import type * as ToltApi from "../../../../index.js";
  *     }
  */
 export interface ListClicksRequest {
+    /** How many rows to return in one page. */
     limit?: number;
+    /** Ranking direction: desc puts the most recently created or updated rows first. */
     order?: ToltApi.ListClicksRequestOrder;
-    /** Column the list is ordered and paged by. */
+    /** Timestamp to order and page by: created_at follows creation order, updated_at follows each item's most recent change. */
     sort?: ToltApi.ListClicksRequestSort;
     /** Continue after a position: the next_cursor of a previous page, or an item id when sorting by created_at. Cannot be combined with ending_before. */
     starting_after?: string;
     /** Page backward from a position: the prev_cursor of a previous page, or an item id when sorting by created_at. Cannot be combined with starting_after. */
     ending_before?: string;
-    /** Only items created at or after this ISO 8601 time. */
+    /** Start of a window on when items were created: items created at this time or later are included, for example 2026-01-01T00:00:00Z. Leave it out for no lower bound. */
     created_after?: string;
-    /** Only items created before this ISO 8601 time. */
+    /** End of a window on when items were created: only items created before this time are included. Leave it out for no upper bound. */
     created_before?: string;
-    /** Only items updated at or after this ISO 8601 time. Combine with sort=updated_at to sync changes. */
+    /** Only items last changed at or after this moment; with sort=updated_at, use it to fetch what changed since a previous sync. */
     updated_after?: string;
-    /** Only items updated before this ISO 8601 time. */
+    /** Only items last changed before this moment; pair it with updated_after to fetch what changed in a period. */
     updated_before?: string;
+    /** Limit to one program, by its id (prg_...) as returned when listing programs. */
     program_id?: string;
+    /** Limit to one partner, by its id (part_...) as returned when listing partners. */
     partner_id?: string;
+    /** Limit to one referral link, by its id (lnk_...) as returned when listing links. */
     link_id?: string;
     /** Filter by the click's stored country, matched exactly (values are not normalized). Clicks recorded by the tracking script store a country name (e.g. `Canada`); clicks created through the API store a 2-letter ISO code (e.g. `CA`). Filter by the exact form you expect. */
     country?: string;

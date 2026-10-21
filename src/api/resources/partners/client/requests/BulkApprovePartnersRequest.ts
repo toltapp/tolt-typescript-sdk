@@ -3,10 +3,10 @@
 /**
  * @example
  *     {
- *         ids: ["part_9fQ2xLL", "part_3RtV9k"]
+ *         ids: ["part_NLYzgNKuSuASvrvoxNtau6SY", "part_9fQ2xLLmN3kP8dRvT1wYbHcS"]
  *     }
  */
 export interface BulkApprovePartnersRequest {
-    /** Up to 100 ids. Duplicates are processed once. */
+    /** Ids of the partners to act on, as returned when listing partners. Each one succeeds or fails on its own and gets its own entry in results. */
     ids: string[];
 }

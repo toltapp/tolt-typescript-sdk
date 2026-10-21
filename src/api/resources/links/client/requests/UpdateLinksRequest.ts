@@ -3,11 +3,15 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "lnk_mtTeeckFa1vMdvDFXretQNs6",
+ *         param: "ref",
+ *         value: "sam"
  *     }
  */
 export interface UpdateLinksRequest {
     id: string;
-    param?: string | null;
+    /** New query parameter of the link, e.g. `ref` in `?ref=sam`. URLs with the old parameter stop matching this link. */
+    param?: string;
+    /** New slug, e.g. `sam` in `?ref=sam`, stored lowercased. URLs using the old slug stop matching this link. */
     value?: string;
 }

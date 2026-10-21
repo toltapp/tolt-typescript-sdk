@@ -5,7 +5,10 @@
  *     {}
  */
 export interface CustomerStatsReportsRequest {
+    /** Limit to one program, by its id (prg_...) as returned when listing programs. */
     program_id?: string;
+    /** Earliest day to include, by the day customers became active. Leave it out for no lower bound. */
     start_date?: string;
+    /** Latest day to include, by the day customers became active; the whole day counts. Leave it out for no upper bound. */
     end_date?: string;
 }

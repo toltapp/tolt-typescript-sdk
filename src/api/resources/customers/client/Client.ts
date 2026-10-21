@@ -24,11 +24,14 @@ export class CustomersClient {
     }
 
     /**
+     * Lists customers. Filter by program, partner, link, click, status or your own customer_id, and page with cursors.
+     *
      * @param {ToltApi.ListCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
@@ -93,7 +96,7 @@ export class CustomersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/customers",
             ),
             method: "GET",
@@ -119,6 +122,11 @@ export class CustomersClient {
                     throw new ToltApi.BadRequestError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 401:
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -137,18 +145,27 @@ export class CustomersClient {
     }
 
     /**
+     * Creates a customer attributed to a partner. Pass partner_id or link_id, and optionally the click_id that brought them in.
+     *
      * @param {ToltApi.CreateCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
-     *     await client.customers.create()
+     *     await client.customers.create({
+     *         email: "alex@example.com",
+     *         name: "Alex Morgan",
+     *         customer_id: "user_4821",
+     *         link_id: "lnk_mtTeeckFa1vMdvDFXretQNs6",
+     *         partner_id: "part_NLYzgNKuSuASvrvoxNtau6SY"
+     *     })
      */
     public create(
         request: ToltApi.CreateCustomersRequest = {},
@@ -171,7 +188,7 @@ export class CustomersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 "v2/customers",
             ),
             method: "POST",
@@ -198,6 +215,11 @@ export class CustomersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -216,18 +238,21 @@ export class CustomersClient {
     }
 
     /**
+     * Gets a customer by ID, with its status, the partner it is attributed to and your own customer and subscription IDs.
+     *
      * @param {ToltApi.GetCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.customers.get({
-     *         id: "id"
+     *         id: "cus_LBfjvtfct9pVUeLojMHiGnXv"
      *     })
      */
     public get(
@@ -252,7 +277,7 @@ export class CustomersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/customers/${core.url.encodePathParam(id)}`,
             ),
             method: "GET",
@@ -274,6 +299,11 @@ export class CustomersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -292,6 +322,8 @@ export class CustomersClient {
     }
 
     /**
+     * Updates a customer's name, email, status, your own IDs, or the click and link the customer came from.
+     *
      * @param {ToltApi.UpdateCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -299,13 +331,16 @@ export class CustomersClient {
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
      * @throws {@link ToltApi.ConflictError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.customers.update({
-     *         id: "id"
+     *         id: "cus_LBfjvtfct9pVUeLojMHiGnXv",
+     *         name: "Alex Morgan",
+     *         status: "active"
      *     })
      */
     public update(
@@ -330,7 +365,7 @@ export class CustomersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/customers/${core.url.encodePathParam(id)}`,
             ),
             method: "PUT",
@@ -359,6 +394,11 @@ export class CustomersClient {
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 409:
                     throw new ToltApi.ConflictError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,
@@ -377,19 +417,22 @@ export class CustomersClient {
     }
 
     /**
+     * Deletes a customer. Fails when any of the customer's commissions is paid or already included in a payout.
+     *
      * @param {ToltApi.DeleteCustomersRequest} request
      * @param {CustomersClient.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
      * @throws {@link errors.ToltApiTimeoutError}
      *
      * @example
      *     await client.customers.delete({
-     *         id: "id"
+     *         id: "cus_LBfjvtfct9pVUeLojMHiGnXv"
      *     })
      */
     public delete(
@@ -414,7 +457,7 @@ export class CustomersClient {
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
-                    environments.ToltApiEnvironment.Production,
+                    environments.ToltApiEnvironment.Default,
                 `v2/customers/${core.url.encodePathParam(id)}`,
             ),
             method: "DELETE",
@@ -438,6 +481,11 @@ export class CustomersClient {
                     throw new ToltApi.UnauthorizedError(_response.error.body as ToltApi.Error_, _response.rawResponse);
                 case 404:
                     throw new ToltApi.NotFoundError(_response.error.body as ToltApi.Error_, _response.rawResponse);
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.Error_,
+                        _response.rawResponse,
+                    );
                 case 429:
                     throw new ToltApi.TooManyRequestsError(
                         _response.error.body as ToltApi.Error_,

@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a"
  *     }
  */
 export interface GetGroupsRequest {

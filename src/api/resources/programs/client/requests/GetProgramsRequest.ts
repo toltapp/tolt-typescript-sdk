@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "prg_T6z8aRW3XCmvFWP972RKxpAd"
  *     }
  */
 export interface GetProgramsRequest {

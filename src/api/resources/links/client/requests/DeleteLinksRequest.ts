@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "lnk_mtTeeckFa1vMdvDFXretQNs6"
  *     }
  */
 export interface DeleteLinksRequest {

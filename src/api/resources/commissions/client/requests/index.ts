@@ -5,4 +5,4 @@ export type { DeclineCommissionsRequest } from "./DeclineCommissionsRequest.js";
 export type { DeleteCommissionsRequest } from "./DeleteCommissionsRequest.js";
 export type { GetCommissionsRequest } from "./GetCommissionsRequest.js";
 export type { ListCommissionsRequest } from "./ListCommissionsRequest.js";
-export type { UpdateCommissionsRequest } from "./UpdateCommissionsRequest.js";
+export { UpdateCommissionsRequest } from "./UpdateCommissionsRequest.js";

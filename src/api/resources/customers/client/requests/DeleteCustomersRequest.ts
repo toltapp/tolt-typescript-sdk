@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "cus_LBfjvtfct9pVUeLojMHiGnXv"
  *     }
  */
 export interface DeleteCustomersRequest {

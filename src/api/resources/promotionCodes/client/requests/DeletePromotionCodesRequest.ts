@@ -3,7 +3,7 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "promo_gTCAUsWfdmN2GuCVRaHWNRan"
  *     }
  */
 export interface DeletePromotionCodesRequest {

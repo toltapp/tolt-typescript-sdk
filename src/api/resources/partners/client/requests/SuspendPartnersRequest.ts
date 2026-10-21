@@ -3,10 +3,11 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "part_NLYzgNKuSuASvrvoxNtau6SY"
  *     }
  */
 export interface SuspendPartnersRequest {
     id: string;
+    /** Reason for the suspension, shown to the partner in the partner portal. Null clears an earlier reason. */
     suspension_reason?: string | null;
 }

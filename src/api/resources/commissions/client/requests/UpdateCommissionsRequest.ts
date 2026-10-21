@@ -3,18 +3,34 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "comm_X85RLnefjTCNrypH4MA1PdSp",
+ *         amount: 1000,
+ *         revenue: 5000,
+ *         status: "approved"
  *     }
  */
 export interface UpdateCommissionsRequest {
     id: string;
-    /** Monetary amount as an integer in the smallest currency unit (cents), e.g. 500 = 5.00 */
+    /** What the partner earns for this commission, in minor units of the program currency (cents for USD). */
     amount?: number;
-    /** Monetary amount as an integer in the smallest currency unit (cents), e.g. 500 = 5.00 */
+    /** The sale amount the commission is based on, in minor units of the program currency. */
     revenue?: number;
-    status?: string | null;
+    status?: UpdateCommissionsRequest.Status;
+    /** Free-form label for where the commission came from, such as stripe or api. */
     source?: string | null;
+    /** Id of the payment in your billing system that the commission is for, such as a Stripe charge id. */
     charge_id?: string | null;
+    /** Id of the transaction the commission is for (txn_...). It must belong to the commission's customer, or to its partner and program, and must not be refunded. */
     transaction_id?: string | null;
+    /** When the commission was earned, as a timestamp with a time zone, for example 2026-03-01T12:00:00Z. Reports and filters by creation date place the commission on this date; the upcoming approvals forecast goes by its scheduled approval date, which this does not change. */
     created_at?: string;
+}
+
+export namespace UpdateCommissionsRequest {
+    export const Status = {
+        Pending: "pending",
+        Approved: "approved",
+        Rejected: "rejected",
+    } as const;
+    export type Status = (typeof Status)[keyof typeof Status];
 }

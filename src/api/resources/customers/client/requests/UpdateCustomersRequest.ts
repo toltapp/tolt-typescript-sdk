@@ -3,26 +3,39 @@
 /**
  * @example
  *     {
- *         id: "id"
+ *         id: "cus_LBfjvtfct9pVUeLojMHiGnXv",
+ *         name: "Alex Morgan",
+ *         status: "active"
  *     }
  */
 export interface UpdateCustomersRequest {
     id: string;
+    /** New email, stored lowercased and used as the customer's identifier. It must not belong to another customer. */
     email?: string;
-    /** Resolve a code in the partner’s program, preferring partner, group, then program scope. An unmatched code leaves attribution unchanged. Null clears the promotion code and its derived attribution. */
+    /** Resolve a code in the partner’s program, ignoring case, preferring partner, group, then program scope. An unmatched code leaves attribution unchanged. Null clears the promotion code and its derived attribution. */
     promotion_code?: string | null;
+    /** When the customer was created, as a timestamp with a time zone, for example 2026-03-01T12:00:00Z. Reports and filters that date customers by creation use it; those that date them by conversion read active_at, which this does not change. */
     created_at?: string;
+    /** Customer's full name as you want it shown in the dashboard; it does not affect attribution or matching. */
     name?: string | null;
+    /** Lifecycle stage of the customer. Changing it does not set active_at or run commission flows. */
     status?: UpdateCustomersRequest.Status | null;
+    /** Customer's id in your billing system, such as a Stripe customer id. The billing integration matches payments to this customer by it. */
     customer_id?: string;
+    /** Customer's subscription id in your billing system, such as a Stripe subscription id. */
     subscription_id?: string | null;
+    /** Id of the tracked click the customer came from, as returned when listing clicks. It must belong to the customer's partner; link_id is not changed. */
     click_id?: string | null;
+    /** Id of the referral link the customer came through (lnk_...). It must belong to the customer's partner; a customer without a partner takes the link's partner and program. */
     link_id?: string | null;
+    /** When the customer signed up as a lead, as a timestamp with a time zone, for example 2026-03-01T12:00:00Z. */
     lead_at?: string | null;
+    /** When the customer became a paying customer, as a timestamp with a time zone. */
     active_at?: string | null;
 }
 
 export namespace UpdateCustomersRequest {
+    /** Lifecycle stage of the customer. Changing it does not set active_at or run commission flows. */
     export const Status = {
         Lead: "lead",
         Active: "active",
