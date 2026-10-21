@@ -1,3 +1,19 @@
+## [1.0.0](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.7.0...v1.0.0) (2026-10-21)
+
+### ⚠ BREAKING CHANGES
+
+* Request and response types for single-item operations are
+singular (GetPartnerRequest, ApprovePartnerResponse, CreateClickRequest).
+embed.createToken() is now embedTokens.create(), reports.customerStats() is
+now reports.customers(), and ToltApi.Error_ is now ToltApi.ErrorResponse.
+list() returns a Page instead of the envelope: page.data still holds the
+current rows, and has_more and next_cursor move to page.response.
+groups.list({ default }) and flows.list({ active }) take booleans.
+
+### Features
+
+* regenerate SDK from the latest OpenAPI spec ([#10](https://github.com/toltapp/tolt-typescript-sdk/issues/10)) ([0f57c7f](https://github.com/toltapp/tolt-typescript-sdk/commit/0f57c7f2f81d1eb0c4b051c4092c76378617f596))
+
 ## [0.7.0](https://github.com/toltapp/tolt-typescript-sdk/compare/v0.6.1...v0.7.0) (2026-10-21)
 
 ### Features
