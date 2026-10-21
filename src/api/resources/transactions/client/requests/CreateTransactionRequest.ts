@@ -19,7 +19,7 @@ export interface CreateTransactionRequest {
     product_id?: string;
     /** Readable name of the purchased product, such as Pro plan. It is saved as the transaction's product name, which revenue_by_product groups revenue by; flows match on product_id, not on this name. */
     product_name?: string;
-    /** The payment amount in the smallest unit of the program currency (cents for USD); percentage commissions are calculated from it. */
+    /** The payment amount in the smallest unit of the program currency (cents for USD); percentage commissions are calculated from it. It must be 0 or more: to reverse a payment, refund its transaction instead of recording a negative amount. */
     amount: number;
     /** Id of the customer who paid (cus_...), as returned when listing customers. The transaction goes to that customer's partner and program, and the customer becomes active. */
     customer_id: string;

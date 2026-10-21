@@ -7,18 +7,24 @@
 export interface CreateEmbedTokenRequest {
     /** Id of an existing partner (part_...). Send this or partner, not both. */
     partner_id?: string;
-    /** Look up an onboarded partner by email within a program. Send this or partner_id, not both. */
+    /** Find the partner by email within the program, or create them (active, with a referral link) when the program has no partner with that email. Send this or partner_id, not both. */
     partner?: CreateEmbedTokenRequest.Partner;
 }
 
 export namespace CreateEmbedTokenRequest {
     /**
-     * Look up an onboarded partner by email within a program. Send this or partner_id, not both.
+     * Find the partner by email within the program, or create them (active, with a referral link) when the program has no partner with that email. Send this or partner_id, not both.
      */
     export interface Partner {
         /** Email of the partner, matched without regard to case. */
         email: string;
         /** Program the partner belongs to (prg_...). */
         program_id: string;
+        /** First name, used only when the partner is created. */
+        first_name?: string | undefined;
+        /** Last name, used only when the partner is created. */
+        last_name?: string | undefined;
+        /** Group for a newly created partner. Defaults to the program's default group. */
+        group_id?: string | undefined;
     }
 }
