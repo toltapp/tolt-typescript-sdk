@@ -245,6 +245,7 @@ export class PartnersClient {
                     status,
                     program_id: programId,
                     group_id: groupId,
+                    tag_id: tagId,
                     search,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
@@ -260,6 +261,7 @@ export class PartnersClient {
                     status: status != null ? status : undefined,
                     program_id: programId,
                     group_id: groupId,
+                    tag_id: tagId,
                     search,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -922,5 +924,201 @@ export class PartnersClient {
         }
 
         return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/partners/{id}/suspend");
+    }
+
+    /**
+     * Puts one or more tags on the partner. Each tag must belong to the partner's program; tags the partner already has stay as they are. Returns every tag the partner now has, and sends partner.updated if any tag was added.
+     *
+     * @param {ToltApi.AddPartnerTagsRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.BadRequestError}
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.addPartnerTags({
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY",
+     *         tag_ids: ["ptag_zDEcdqNuNBPcokarWxBnk9gB"]
+     *     })
+     */
+    public addPartnerTags(
+        request: ToltApi.AddPartnerTagsRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.AddPartnerTagsResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__addPartnerTags(request, requestOptions));
+    }
+
+    private async __addPartnerTags(
+        request: ToltApi.AddPartnerTagsRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.AddPartnerTagsResponse>> {
+        const { id, ..._body } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Default,
+                `v2/partners/${core.url.encodePathParam(id, errors.ToltApiError)}/tags`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            requestType: "json",
+            body: mergeAdditionalBodyParameters(_body, requestOptions?.additionalBodyParameters),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.AddPartnerTagsResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 400:
+                    throw new ToltApi.BadRequestError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 401:
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(_response.error, _response.rawResponse, "POST", "/v2/partners/{id}/tags");
+    }
+
+    /**
+     * Takes the tag off the partner. Removing a tag the partner does not have succeeds and changes nothing. Returns every tag the partner still has, and sends partner.updated if the tag was removed.
+     *
+     * @param {ToltApi.RemovePartnerTagRequest} request
+     * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link ToltApi.UnauthorizedError}
+     * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ContentTooLargeError}
+     * @throws {@link ToltApi.TooManyRequestsError}
+     * @throws {@link errors.ToltApiError}
+     * @throws {@link errors.ToltApiTimeoutError}
+     *
+     * @example
+     *     await client.partners.removePartnerTag({
+     *         id: "part_NLYzgNKuSuASvrvoxNtau6SY",
+     *         tag_id: "ptag_zDEcdqNuNBPcokarWxBnk9gB"
+     *     })
+     */
+    public removePartnerTag(
+        request: ToltApi.RemovePartnerTagRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): core.HttpResponsePromise<ToltApi.RemovePartnerTagResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__removePartnerTag(request, requestOptions));
+    }
+
+    private async __removePartnerTag(
+        request: ToltApi.RemovePartnerTagRequest,
+        requestOptions?: PartnersClient.RequestOptions,
+    ): Promise<core.WithRawResponse<ToltApi.RemovePartnerTagResponse>> {
+        const { id, tag_id: tagId } = request;
+        const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
+        const _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            _authRequest.headers,
+            this._options?.headers,
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.ToltApiEnvironment.Default,
+                `v2/partners/${core.url.encodePathParam(id, errors.ToltApiError)}/tags/${core.url.encodePathParam(tagId, errors.ToltApiError)}`,
+            ),
+            method: "DELETE",
+            headers: _headers,
+            queryString: core.url.queryBuilder().mergeAdditional(requestOptions?.queryParams).build(),
+            timeoutMs: (requestOptions?.timeoutInSeconds ?? this._options?.timeoutInSeconds ?? 60) * 1000,
+            maxRetries: requestOptions?.maxRetries ?? this._options?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+            fetchFn: this._options?.fetch,
+            logging: this._options.logging,
+        });
+        if (_response.ok) {
+            return { data: _response.body as ToltApi.RemovePartnerTagResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 401:
+                    throw new ToltApi.UnauthorizedError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 404:
+                    throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 413:
+                    throw new ToltApi.ContentTooLargeError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new ToltApi.TooManyRequestsError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.ToltApiError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        return handleNonStatusCodeError(
+            _response.error,
+            _response.rawResponse,
+            "DELETE",
+            "/v2/partners/{id}/tags/{tag_id}",
+        );
     }
 }

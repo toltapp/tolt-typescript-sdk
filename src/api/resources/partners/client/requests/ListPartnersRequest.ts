@@ -31,6 +31,8 @@ export interface ListPartnersRequest {
     program_id?: string;
     /** Limit to partners in one group, by the group id (grp_...) as returned when listing groups. */
     group_id?: string;
+    /** Limit to partners with this tag, by the tag id (ptag_...) as returned when listing partner tags. */
+    tag_id?: string;
     /** Text matched anywhere in the partner's id, email, first name, last name or company name, ignoring case. */
     search?: string;
 }

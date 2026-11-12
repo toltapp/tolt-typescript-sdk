@@ -5,6 +5,8 @@ import type * as ToltApi from "../index.js";
 export interface PartnerDetails extends ToltApi.Partner {
     /** Custom-field answers with their questions. Empty when no answers exist. */
     custom_fields: PartnerDetails.CustomFields.Item[];
+    /** Tags on the partner, sorted by name. Empty when the partner has none. */
+    tags: ToltApi.PartnerTagSummary[];
 }
 
 export namespace PartnerDetails {

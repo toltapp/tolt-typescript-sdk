@@ -1,3 +1,4 @@
+export * from "./AddPartnerTagsResponse.js";
 export * from "./ApprovePartnerResponse.js";
 export * from "./BulkApprovePartnersResponse.js";
 export * from "./BulkRejectPartnersResponse.js";
@@ -8,5 +9,6 @@ export * from "./ListPartnersRequestSort.js";
 export * from "./ListPartnersRequestStatus.js";
 export * from "./ListPartnersResponse.js";
 export * from "./RejectPartnerResponse.js";
+export * from "./RemovePartnerTagResponse.js";
 export * from "./SuspendPartnerResponse.js";
 export * from "./UpdatePartnerResponse.js";

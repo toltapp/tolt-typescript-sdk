@@ -1169,6 +1169,466 @@ await client.partners.suspend({
 </dl>
 </details>
 
+<details><summary><code>client.partners.<a href="/src/api/resources/partners/client/Client.ts">addPartnerTags</a>({ ...params }) -> ToltApi.AddPartnerTagsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Puts one or more tags on the partner. Each tag must belong to the partner's program; tags the partner already has stay as they are. Returns every tag the partner now has, and sends partner.updated if any tag was added.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partners.addPartnerTags({
+    id: "part_NLYzgNKuSuASvrvoxNtau6SY",
+    tag_ids: ["ptag_zDEcdqNuNBPcokarWxBnk9gB"]
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.AddPartnerTagsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.partners.<a href="/src/api/resources/partners/client/Client.ts">removePartnerTag</a>({ ...params }) -> ToltApi.RemovePartnerTagResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Takes the tag off the partner. Removing a tag the partner does not have succeeds and changes nothing. Returns every tag the partner still has, and sends partner.updated if the tag was removed.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partners.removePartnerTag({
+    id: "part_NLYzgNKuSuASvrvoxNtau6SY",
+    tag_id: "ptag_zDEcdqNuNBPcokarWxBnk9gB"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.RemovePartnerTagRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnersClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+## PartnerTags
+<details><summary><code>client.partnerTags.<a href="/src/api/resources/partnerTags/client/Client.ts">listPartnerTags</a>({ ...params }) -> ToltApi.ListPartnerTagsResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Lists the tags you can put on partners. Filter by program, search by name, and page with cursors.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partnerTags.listPartnerTags();
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.ListPartnerTagsRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnerTagsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.partnerTags.<a href="/src/api/resources/partnerTags/client/Client.ts">createPartnerTag</a>({ ...params }) -> ToltApi.CreatePartnerTagResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Creates a tag in a program. Put it on partners with POST /v2/partners/{id}/tags.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partnerTags.createPartnerTag({
+    program_id: "prg_T6z8aRW3XCmvFWP972RKxpAd",
+    name: "VIP",
+    color: "#2457D6"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.CreatePartnerTagRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnerTagsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.partnerTags.<a href="/src/api/resources/partnerTags/client/Client.ts">getPartnerTag</a>({ ...params }) -> ToltApi.GetPartnerTagResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Gets a partner tag by ID, with how many partners have it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partnerTags.getPartnerTag({
+    id: "ptag_zDEcdqNuNBPcokarWxBnk9gB"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.GetPartnerTagRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnerTagsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.partnerTags.<a href="/src/api/resources/partnerTags/client/Client.ts">updatePartnerTag</a>({ ...params }) -> ToltApi.UpdatePartnerTagResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Renames a tag or changes its color. Partners who have the tag keep it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partnerTags.updatePartnerTag({
+    id: "ptag_zDEcdqNuNBPcokarWxBnk9gB",
+    name: "VIP",
+    color: "#2457D6"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.UpdatePartnerTagRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnerTagsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.partnerTags.<a href="/src/api/resources/partnerTags/client/Client.ts">deletePartnerTag</a>({ ...params }) -> ToltApi.DeletePartnerTagResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Deletes a tag and removes it from every partner who has it.
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.partnerTags.deletePartnerTag({
+    id: "ptag_zDEcdqNuNBPcokarWxBnk9gB"
+});
+
+```
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `ToltApi.DeletePartnerTagRequest` 
+    
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `PartnerTagsClient.RequestOptions` 
+    
+</dd>
+</dl>
+</dd>
+</dl>
+
+
+</dd>
+</dl>
+</details>
+
 ## Programs
 <details><summary><code>client.programs.<a href="/src/api/resources/programs/client/Client.ts">list</a>({ ...params }) -> core.Page&lt;ToltApi.Program, ToltApi.ListProgramsResponse&gt;</code></summary>
 <dl>
