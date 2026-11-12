@@ -10,6 +10,8 @@ export * from "./Group.js";
 export * from "./Link.js";
 export * from "./Partner.js";
 export * from "./PartnerDetails.js";
+export * from "./PartnerTag.js";
+export * from "./PartnerTagSummary.js";
 export * from "./Program.js";
 export * from "./PromotionCode.js";
 export * from "./ReportsCustomerStats.js";

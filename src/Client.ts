@@ -8,6 +8,7 @@ import { FlowsClient } from "./api/resources/flows/client/Client.js";
 import { GroupsClient } from "./api/resources/groups/client/Client.js";
 import { LinksClient } from "./api/resources/links/client/Client.js";
 import { PartnersClient } from "./api/resources/partners/client/Client.js";
+import { PartnerTagsClient } from "./api/resources/partnerTags/client/Client.js";
 import { ProgramsClient } from "./api/resources/programs/client/Client.js";
 import { PromotionCodesClient } from "./api/resources/promotionCodes/client/Client.js";
 import { ReportsClient } from "./api/resources/reports/client/Client.js";
@@ -29,6 +30,7 @@ export class ToltApiClient {
     protected _flows: FlowsClient | undefined;
     protected _clicks: ClicksClient | undefined;
     protected _partners: PartnersClient | undefined;
+    protected _partnerTags: PartnerTagsClient | undefined;
     protected _programs: ProgramsClient | undefined;
     protected _customers: CustomersClient | undefined;
     protected _commissions: CommissionsClient | undefined;
@@ -59,6 +61,10 @@ export class ToltApiClient {
 
     public get partners(): PartnersClient {
         return (this._partners ??= new PartnersClient(this._options));
+    }
+
+    public get partnerTags(): PartnerTagsClient {
+        return (this._partnerTags ??= new PartnerTagsClient(this._options));
     }
 
     public get programs(): ProgramsClient {
