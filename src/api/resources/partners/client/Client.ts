@@ -209,7 +209,7 @@ export class PartnersClient {
     }
 
     /**
-     * Lists onboarded partners. Filter by status, program or group, search by name, email or company, and page with cursors.
+     * Lists onboarded partners. Filter by status, program, group or external_id, search by name, email or company, and page with cursors.
      *
      * @param {ToltApi.ListPartnersRequest} request
      * @param {PartnersClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -246,6 +246,7 @@ export class PartnersClient {
                     program_id: programId,
                     group_id: groupId,
                     tag_id: tagId,
+                    external_id: externalId,
                     search,
                 } = request;
                 const _queryParams: Record<string, unknown> = {
@@ -262,6 +263,7 @@ export class PartnersClient {
                     program_id: programId,
                     group_id: groupId,
                     tag_id: tagId,
+                    external_id: externalId,
                     search,
                 };
                 const _authRequest: core.AuthRequest = await this._options.authProvider.getAuthRequest();
@@ -358,6 +360,7 @@ export class PartnersClient {
      *     await client.partners.create({
      *         email: "sam@example.com",
      *         program_id: "prg_T6z8aRW3XCmvFWP972RKxpAd",
+     *         external_id: "user_123",
      *         first_name: "Sam",
      *         last_name: "Taylor",
      *         group_id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a",
@@ -545,6 +548,7 @@ export class PartnersClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ConflictError}
      * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
@@ -613,6 +617,11 @@ export class PartnersClient {
                     );
                 case 404:
                     throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new ToltApi.ConflictError(
                         _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );

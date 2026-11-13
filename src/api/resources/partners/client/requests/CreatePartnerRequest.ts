@@ -5,6 +5,7 @@
  *     {
  *         email: "sam@example.com",
  *         program_id: "prg_T6z8aRW3XCmvFWP972RKxpAd",
+ *         external_id: "user_123",
  *         first_name: "Sam",
  *         last_name: "Taylor",
  *         group_id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a",
@@ -19,6 +20,8 @@ export interface CreatePartnerRequest {
     email: string;
     /** Id of the program to add the partner to (prg_...), as returned when listing programs. */
     program_id: string;
+    /** Your own id for this partner, such as the user id in your app, so you can find them by it later. No other partner in the program can have it. */
+    external_id?: string;
     /** Partner's first name. With last_name it is used for the default link value when link is omitted. */
     first_name?: string;
     /** Partner's last name. With first_name it makes up the name shown for the partner unless display_name is set. */

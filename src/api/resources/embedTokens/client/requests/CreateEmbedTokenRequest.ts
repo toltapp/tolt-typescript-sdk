@@ -7,19 +7,21 @@
 export interface CreateEmbedTokenRequest {
     /** Id of an existing partner (part_...). Send this or partner, not both. */
     partner_id?: string;
-    /** Find the partner by email within the program, or create them (active, with a referral link) when the program has no partner with that email. Send this or partner_id, not both. */
+    /** Find the partner by external_id or email within the program, or create them (active, with a referral link) when the program has no such partner. Send this or partner_id, not both. */
     partner?: CreateEmbedTokenRequest.Partner;
 }
 
 export namespace CreateEmbedTokenRequest {
     /**
-     * Find the partner by email within the program, or create them (active, with a referral link) when the program has no partner with that email. Send this or partner_id, not both.
+     * Find the partner by external_id or email within the program, or create them (active, with a referral link) when the program has no such partner. Send this or partner_id, not both.
      */
     export interface Partner {
         /** Email of the partner, matched without regard to case. */
         email: string;
         /** Program the partner belongs to (prg_...). */
         program_id: string;
+        /** Your own id for the partner, such as the user id in your app. Matched before email, so the partner is still found after their email changes. Saved on a partner found by email who has none yet, and on a newly created partner. */
+        external_id?: string | undefined;
         /** First name, used only when the partner is created. */
         first_name?: string | undefined;
         /** Last name, used only when the partner is created. */

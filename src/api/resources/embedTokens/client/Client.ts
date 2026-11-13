@@ -24,7 +24,7 @@ export class EmbedTokensClient {
     }
 
     /**
-     * Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser. With partner (email and program_id), the partner is created when the program has none with that email, so one call covers a user's first visit.
+     * Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser. With partner (email and program_id, plus your own external_id), the partner is found by external_id, then by email, and created when the program has neither, so one call covers a user's first visit.
      *
      * @param {ToltApi.CreateEmbedTokenRequest} request
      * @param {EmbedTokensClient.RequestOptions} requestOptions - Request-specific configuration.
@@ -32,6 +32,7 @@ export class EmbedTokensClient {
      * @throws {@link ToltApi.BadRequestError}
      * @throws {@link ToltApi.UnauthorizedError}
      * @throws {@link ToltApi.NotFoundError}
+     * @throws {@link ToltApi.ConflictError}
      * @throws {@link ToltApi.ContentTooLargeError}
      * @throws {@link ToltApi.TooManyRequestsError}
      * @throws {@link errors.ToltApiError}
@@ -94,6 +95,11 @@ export class EmbedTokensClient {
                     );
                 case 404:
                     throw new ToltApi.NotFoundError(
+                        _response.error.body as ToltApi.ErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new ToltApi.ConflictError(
                         _response.error.body as ToltApi.ErrorResponse,
                         _response.rawResponse,
                     );
