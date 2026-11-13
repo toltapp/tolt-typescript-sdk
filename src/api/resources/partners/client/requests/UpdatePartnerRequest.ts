@@ -21,6 +21,8 @@ export interface UpdatePartnerRequest {
     country_code?: string | null;
     /** URL of the partner's website, starting with http:// or https://; null clears it. */
     website_url?: string | null;
+    /** Your own id for this partner, such as the user id in your app. No other partner in the program can have it; null clears it. */
+    external_id?: string | null;
     /** Id of a group in the partner's program to move them to (grp_...), as returned when listing groups. Commission flows scoped to that group then apply to them; null removes them from their group. */
     group_id?: string | null;
 }

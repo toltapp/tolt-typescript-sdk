@@ -3,6 +3,8 @@
 export interface Partner {
     id: string;
     email: string;
+    /** Your own id for the partner, such as the user id in your app, or null. */
+    external_id: string | null;
     first_name: string | null;
     last_name: string | null;
     company_name: string | null;

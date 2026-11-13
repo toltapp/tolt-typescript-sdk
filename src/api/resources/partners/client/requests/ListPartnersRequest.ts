@@ -33,6 +33,8 @@ export interface ListPartnersRequest {
     group_id?: string;
     /** Limit to partners with this tag, by the tag id (ptag_...) as returned when listing partner tags. */
     tag_id?: string;
+    /** Keep only partners with this external_id, matched exactly. Add program_id to get at most one partner. */
+    external_id?: string;
     /** Text matched anywhere in the partner's id, email, first name, last name or company name, ignoring case. */
     search?: string;
 }

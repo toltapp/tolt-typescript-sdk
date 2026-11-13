@@ -12,7 +12,7 @@
 <dl>
 <dd>
 
-Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser. With partner (email and program_id), the partner is created when the program has none with that email, so one call covers a user's first visit.
+Mint a short-lived, partner-scoped token for the embedded referral dashboard. Safe to send to the browser. With partner (email and program_id, plus your own external_id), the partner is found by external_id, then by email, and created when the program has neither, so one call covers a user's first visit.
 </dd>
 </dl>
 </dd>
@@ -705,7 +705,7 @@ await client.partners.bulkReject({
 <dl>
 <dd>
 
-Lists onboarded partners. Filter by status, program or group, search by name, email or company, and page with cursors.
+Lists onboarded partners. Filter by status, program, group or external_id, search by name, email or company, and page with cursors.
 </dd>
 </dl>
 </dd>
@@ -798,6 +798,7 @@ Creates an onboarded partner together with their referral link. The link value d
 await client.partners.create({
     email: "sam@example.com",
     program_id: "prg_T6z8aRW3XCmvFWP972RKxpAd",
+    external_id: "user_123",
     first_name: "Sam",
     last_name: "Taylor",
     group_id: "grp_zUQ8Pt281MsbNDApmDPN3Y2a",
