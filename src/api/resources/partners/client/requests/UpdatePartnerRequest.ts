@@ -11,13 +11,13 @@
  */
 export interface UpdatePartnerRequest {
     id: string;
-    /** Partner's first name, part of the name shown for them unless they have a display name; null clears it. */
+    /** Partner's first name. Partners manage it from their account: a request that changes it returns 400, sending the current value is accepted. */
     first_name?: string | null;
-    /** Partner's family name, shown with first_name in the dashboard and partner portal; null clears it. */
+    /** Partner's family name. Partners manage it from their account: a request that changes it returns 400, sending the current value is accepted. */
     last_name?: string | null;
-    /** Business the partner promotes through; null clears it. */
+    /** Business the partner promotes through. Partners manage it from their account: a request that changes it returns 400, sending the current value is accepted. */
     company_name?: string | null;
-    /** Partner's country as a two-letter ISO code. Commission flows can match on it. */
+    /** Partner's country as a two-letter ISO code. Partners manage it from their account: a request that changes it returns 400, sending the current value is accepted. */
     country_code?: string | null;
     /** URL of the partner's website, starting with http:// or https://; null clears it. */
     website_url?: string | null;
